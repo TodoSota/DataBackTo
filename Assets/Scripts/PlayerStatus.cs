@@ -39,8 +39,8 @@ public class PlayerStatus : MonoBehaviour
             Die();
         }
 
-        UnityEngine.Debug.Log("Hp : " + hp);
-        UnityEngine.Debug.Log("JumpCount : " + currentJumpCount);
+        //UnityEngine.Debug.Log("Hp : " + hp);
+        //UnityEngine.Debug.Log("JumpCount : " + currentJumpCount);
     }
 
     public void ConsumeHp(float amount)
