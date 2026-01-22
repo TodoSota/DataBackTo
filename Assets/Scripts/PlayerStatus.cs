@@ -26,7 +26,6 @@ public class PlayerStatus : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Mathf.Abs(rb.velocity.x) > 0.1f)
@@ -38,9 +37,13 @@ public class PlayerStatus : MonoBehaviour
         {
             Die();
         }
+    }
 
-        //UnityEngine.Debug.Log("Hp : " + hp);
-        //UnityEngine.Debug.Log("JumpCount : " + currentJumpCount);
+    public void displayState()
+    {
+        UnityEngine.Debug.Log("Hp : " + hp);
+        UnityEngine.Debug.Log("JumpCount : " + currentJumpCount);
+        UnityEngine.Debug.Log("Money : " + money);
     }
 
     public void ConsumeHp(float amount)
