@@ -535,6 +535,7 @@ GameObject:
   - component: {fileID: 1958061438}
   - component: {fileID: 1958061443}
   - component: {fileID: 1958061444}
+  - component: {fileID: 1958061445}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -686,6 +687,20 @@ MonoBehaviour:
   hpLossPerSecond: 0.5
   currentJumpCount: 0
   maxJumpLimit: 1
+--- !u!114 &1958061445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958061437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15dc66dc49b0a1c4f974e7342c4bc067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requireHoldTime: 1.5
+  maxReceiptLimit: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
