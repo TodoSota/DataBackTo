@@ -6,13 +6,13 @@ namespace MapScene
 {
     public class StageSelectManager : MonoBehaviour
     {
-        public GameObject[] StageChips;
+        public StageNode[] StageNodes;
 
-        private int CurrentIndex = 0;
-        // Start is called before the first frame update
+        private int CurrentStageIndex;
+
         void Start()
         {
-
+            CurrentStageIndex = 0;
         }
 
         // Update is called once per frame
