@@ -18,8 +18,7 @@ namespace MapScene
         [SerializeField] private bool isCleared;
 
         // オブジェクト情報
-        private Transform myTransform;
-        private MeshRenderer myRenderer;
+        private MeshRenderer _renderer;
 
         // マテリアル
         [SerializeField] private Material _clearedMaterial;
@@ -27,10 +26,15 @@ namespace MapScene
 
         void Start()
         {
-            myTransform = transform;
-            myRenderer = GetComponent<MeshRenderer>();
+            _renderer = GetComponent<MeshRenderer>();
 
             UpdateMaterial();
+        }
+
+        // インデックスが何番目か？をマネージャーから教えるための関数
+        public void SetIndex(int index)
+        {
+            StageIndex = index;
         }
 
         // Unityエディタ上で何か変更されたら
@@ -62,23 +66,23 @@ namespace MapScene
         // クリア状況による色の変更
         void UpdateMaterial()
         {
-            if (myRenderer == null) return;
+            if (_renderer == null) return;
 
             Material mat = isCleared ? _clearedMaterial : _unclearedMaterial;
-            myRenderer.material = mat;
+            _renderer.material = mat;
         }
 
         // クリア状態を変更
         public void SetClearFlag(bool flag)
         {
-            this.isCleared = flag;
+            isCleared = flag;
             UpdateMaterial();
         }
 
         // 自身のポジションを返す
         public Vector3 GetPosition()
         {
-            return myTransform.position;
+            return transform.position;
         }
     }
 }
