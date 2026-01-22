@@ -13,20 +13,19 @@ namespace MapScene
         public StageNode rightNode;
 
         // ステージ情報
-        public int StageIndex{get; private set;}
+        public string stageName;
+        public int StageIndex;
         [SerializeField] private bool isCleared;
 
         // オブジェクト情報
-        private Transform _transform;
         private MeshRenderer _renderer;
 
         // マテリアル
         [SerializeField] private Material _clearedMaterial;
         [SerializeField] private Material _unclearedMaterial;
 
-        void Awake()
+        void Start()
         {
-            _transform = transform;
             _renderer = GetComponent<MeshRenderer>();
 
             UpdateMaterial();
@@ -35,7 +34,6 @@ namespace MapScene
         // インデックスが何番目か？をマネージャーから教えるための関数
         public void SetIndex(int index)
         {
-            Debug.Log("Set index : " + index);
             StageIndex = index;
         }
 
@@ -84,7 +82,7 @@ namespace MapScene
         // 自身のポジションを返す
         public Vector3 GetPosition()
         {
-            return _transform.position;
+            return transform.position;
         }
     }
 }

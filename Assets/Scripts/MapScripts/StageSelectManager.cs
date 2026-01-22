@@ -6,23 +6,23 @@ namespace MapScene
 {
     public class StageSelectManager : MonoBehaviour
     {
-        // ステージの集合を管理
         public StageNode[] StageNodes;
-        private int CurrentStageIndex = 0;
-        // カメラとノードの間の距離
-        [SerializeField] private readonly float DISTANCE_FROM_NODE = 5;
 
-        // カメラ
-        [SerializeField] private MapCam _mapCam;
+        private int CurrentStageIndex;
+        [SerializeField] private MapCam _mapCam; 
+        [SerializeField] private float DISTANCE_FROM_NODE = 5f; // readonlyを消したもの
+        // カーソル
+        [SerializeField] private MapCursor cursor;
 
         void Start()
         {
             // ゲームシーンから戻ってきた際はCurrentStageIndexを対応したものにする必要がある
             // スクリプタブルオブジェクトなどを用いてシーンをまたいだ管理が必要
-            MoveCamAboveNode(CurrentStageIndex);
+            MoveAboveNode(CurrentStageIndex);
             SetUpStageNodeIndex();
         }
 
+        // Update is called once per frame
         void Update()
         {
             HandleArrowKeyInput();
@@ -30,11 +30,12 @@ namespace MapScene
         }
 
         // 指定ノードへのカメラの移動
-        public void MoveCamAboveNode(int index)
+        public void MoveAboveNode(int index)
         {
             if (index < 0 || index >= StageNodes.Length) return;
             Vector3 nodePos = StageNodes[index].GetPosition();
             _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
+            cursor.Move(nodePos);
         }
 
         // ステージ番号の割り振り
@@ -45,7 +46,6 @@ namespace MapScene
                 StageNodes[i].SetIndex(i);
             }
         }
-
         // 矢印キー入力による移動処理
         private void HandleArrowKeyInput()
         {
@@ -60,7 +60,7 @@ namespace MapScene
             if(nextNode is not null)
             {
                 CurrentStageIndex = nextNode.StageIndex;
-                MoveCamAboveNode(CurrentStageIndex);
+                MoveAboveNode(CurrentStageIndex);
             }
         }
 
