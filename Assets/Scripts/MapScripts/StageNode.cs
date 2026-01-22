@@ -13,30 +13,24 @@ namespace MapScene
         public StageNode rightNode;
 
         // ステージ情報
-        public int StageIndex{get; private set;}
+        public string stageName;
+        public int StageIndex;
         [SerializeField] private bool isCleared;
 
         // オブジェクト情報
-        private Transform _transform;
-        private MeshRenderer _renderer;
+        private Transform myTransform;
+        private MeshRenderer myRenderer;
 
         // マテリアル
         [SerializeField] private Material _clearedMaterial;
         [SerializeField] private Material _unclearedMaterial;
 
-        void Awake()
+        void Start()
         {
-            _transform = transform;
-            _renderer = GetComponent<MeshRenderer>();
+            myTransform = transform;
+            myRenderer = GetComponent<MeshRenderer>();
 
             UpdateMaterial();
-        }
-
-        // インデックスが何番目か？をマネージャーから教えるための関数
-        public void SetIndex(int index)
-        {
-            Debug.Log("Set index : " + index);
-            StageIndex = index;
         }
 
         // Unityエディタ上で何か変更されたら
@@ -68,23 +62,23 @@ namespace MapScene
         // クリア状況による色の変更
         void UpdateMaterial()
         {
-            if (_renderer == null) return;
+            if (myRenderer == null) return;
 
             Material mat = isCleared ? _clearedMaterial : _unclearedMaterial;
-            _renderer.material = mat;
+            myRenderer.material = mat;
         }
 
         // クリア状態を変更
         public void SetClearFlag(bool flag)
         {
-            isCleared = flag;
+            this.isCleared = flag;
             UpdateMaterial();
         }
 
         // 自身のポジションを返す
         public Vector3 GetPosition()
         {
-            return _transform.position;
+            return myTransform.position;
         }
     }
 }
