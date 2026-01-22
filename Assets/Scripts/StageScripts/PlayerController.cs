@@ -31,7 +31,8 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
         // ジャンプ入力 : Space 、 接地時のみ呼び出し可能
-        if (Input.GetKeyDown(KeyCode.Space) && status.currentJumpCount < status.maxJumpLimit) {
+        if (Input.GetKeyDown(KeyCode.Space) && status.currentJumpCount < status.maxJumpLimit)
+        {
             Jump();
         }
     }
@@ -57,7 +58,8 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         // 接触しているオブジェクトの名前が Ground ならば
-        if (collision.gameObject.CompareTag("Ground")) {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
             isGrounded = true;
             status.ResetJumpConut();
         }
@@ -67,7 +69,8 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         // 接触しているオブジェクトの名前が Ground ならば
-        if (collision.gameObject.CompareTag("Ground")){
+        if (collision.gameObject.CompareTag("Ground"))
+        {
             isGrounded = false;
         }
     }
