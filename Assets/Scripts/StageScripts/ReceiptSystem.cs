@@ -88,6 +88,5 @@ public class ReceiptSystem : MonoBehaviour
         receiptStack.RemoveAt(lastIndex);
 
         UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
-        status.displayState();
     }
 }
