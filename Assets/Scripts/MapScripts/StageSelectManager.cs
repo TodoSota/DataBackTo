@@ -13,6 +13,8 @@ namespace MapScene
         [SerializeField] private float DISTANCE_FROM_NODE = 5f; // readonlyを消したもの
         // カーソル
         [SerializeField] private MapCursor cursor;
+        // ステージの名前を表示するパネル
+        [SerializeField] private StageNamePanel _stageNamePanel;
 
         void Start()
         {
@@ -33,9 +35,14 @@ namespace MapScene
         public void MoveAboveNode(int index)
         {
             if (index < 0 || index >= StageNodes.Length) return;
-            Vector3 nodePos = StageNodes[index].GetPosition();
+
+            StageNode node = StageNodes[index];
+            Vector3 nodePos = node.GetPosition();
             _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
+
             cursor.Move(nodePos);
+
+            _stageNamePanel.SetStageName(node.stageName);
         }
 
         // ステージ番号の割り振り
