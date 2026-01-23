@@ -42,7 +42,7 @@ public class ReceiptSystem : MonoBehaviour
             // 長押しタイマー加算
             holdTimer += Time.deltaTime;
 
-            if(holdTimer >= requireHoldTime)
+            if (holdTimer >= requireHoldTime)
             {
                 SaveState();
                 isSaveProcessed = true;
@@ -88,5 +88,6 @@ public class ReceiptSystem : MonoBehaviour
         receiptStack.RemoveAt(lastIndex);
 
         UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
+        status.DisplayState();
     }
 }
