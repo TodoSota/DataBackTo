@@ -8,34 +8,54 @@ namespace MapScene
     {
         public StageNode[] StageNodes;
 
-        private int CurrentStageIndex;
-        [SerializeField] private MapCam _mapCam; 
-        [SerializeField] private float DISTANCE_FROM_NODE = 5f; // readonlyを消したもの
-        // カーソル
-        [SerializeField] private MapCursor cursor;
+        [SerializeField]private MapData _mapData;
+
+        [SerializeField] private MapInputHandler _inputHandler;
+        [SerializeField] private MapView _view;
 
         void Start()
         {
-            // ゲームシーンから戻ってきた際はCurrentStageIndexを対応したものにする必要がある
+            // ゲームシーンから戻ってきた際は_mapData.CurrentStageIndexを対応したものにする必要がある
             // スクリプタブルオブジェクトなどを用いてシーンをまたいだ管理が必要
-            MoveAboveNode(CurrentStageIndex);
             SetUpStageNodeIndex();
+            ApplyDataToNodes();
+
+            _inputHandler.OnMoveInput += HandleMove;
+            _inputHandler.OnConfirmInput += PlayTheStage;
+
+            // 初期表示
+            _view.UpdateView(StageNodes[_mapData.CurrentStageIndex]);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void HandleMove(Vector2Int direction)
         {
-            HandleArrowKeyInput();
-            HandleReturnKeyInput();
+            StageNode currentNode = StageNodes[_mapData.CurrentStageIndex];
+            StageNode nextNode = null;
+
+            if (direction == Vector2Int.left) nextNode = currentNode.leftNode;
+            else if (direction == Vector2Int.right) nextNode = currentNode.rightNode;
+            else if (direction == Vector2Int.up) nextNode = currentNode.upNode;
+            else if (direction == Vector2Int.down) nextNode = currentNode.downNode;
+
+            if (nextNode != null)
+            {
+                _mapData.CurrentStageIndex = nextNode.StageIndex;
+                _view.UpdateView(nextNode);
+            }
         }
 
-        // 指定ノードへのカメラの移動
-        public void MoveAboveNode(int index)
+        private void ApplyDataToNodes()
         {
-            if (index < 0 || index >= StageNodes.Length) return;
-            Vector3 nodePos = StageNodes[index].GetPosition();
-            _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
-            cursor.Move(nodePos);
+            // 配列のサイズが合わない場合
+            if (_mapData.StageClearStatuses == null || _mapData.StageClearStatuses.Length != StageNodes.Length)
+            {
+                _mapData.Initialize(StageNodes.Length);
+            }
+
+            for (int i = 0; i < StageNodes.Length; i++)
+            {
+                StageNodes[i].SetClearFlag(_mapData.StageClearStatuses[i]);
+            }
         }
 
         // ステージ番号の割り振り
@@ -46,37 +66,14 @@ namespace MapScene
                 StageNodes[i].SetIndex(i);
             }
         }
-        // 矢印キー入力による移動処理
-        private void HandleArrowKeyInput()
-        {
-            StageNode nextNode = null;
-            StageNode currentNode = StageNodes[CurrentStageIndex];
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) nextNode = currentNode.leftNode;
-            else if (Input.GetKeyDown(KeyCode.UpArrow)) nextNode = currentNode.upNode;
-            else if (Input.GetKeyDown(KeyCode.RightArrow)) nextNode = currentNode.rightNode;
-            else if (Input.GetKeyDown(KeyCode.DownArrow)) nextNode = currentNode.downNode;
-
-            if(nextNode is not null)
-            {
-                CurrentStageIndex = nextNode.StageIndex;
-                MoveAboveNode(CurrentStageIndex);
-            }
-        }
-
-        // リターン（Enterキー）によるステージ決定処理
-        private void HandleReturnKeyInput()
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                PlayTheStage(CurrentStageIndex);
-            }
-        }
 
         // 指定ノードのステージをプレイする
-        private void PlayTheStage(int index)
+        private void PlayTheStage()
         {
-            Debug.Log("index : "+index+" のステージを選択");
+            // <最低限>
+            Debug.Log("index : "+_mapData.CurrentStageIndex+" のステージを選択");
+            
+            // <追加>
             // 対応するステージをプレイ
             // シーン移動
             // 戻ってきたときは、カレントインデックスを指定すること
