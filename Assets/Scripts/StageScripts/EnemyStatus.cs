@@ -8,7 +8,7 @@ public class EnemyStatus : MonoBehaviour
     public int hp = 1;
 
     // ƒ_ƒ[ƒWˆ—
-    public void TakeDamege(int damage)
+    public void TakeDamage(int damage)
     {
         hp -= damage;
         if (hp <= 0)
