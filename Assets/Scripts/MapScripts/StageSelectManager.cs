@@ -9,12 +9,9 @@ namespace MapScene
         public StageNode[] StageNodes;
 
         [SerializeField]private MapData _mapData;
-        [SerializeField] private MapCam _mapCam; 
-        [SerializeField] private float DISTANCE_FROM_NODE = 5f; // readonlyを消したもの
-        // カーソル
-        [SerializeField] private MapCursor cursor;
-        // ステージの名前を表示するパネル
-        [SerializeField] private StageNamePanel _stageNamePanel;
+
+        [SerializeField] private MapInputHandler _inputHandler;
+        [SerializeField] private MapView _view;
 
         void Start()
         {
@@ -22,13 +19,29 @@ namespace MapScene
             // スクリプタブルオブジェクトなどを用いてシーンをまたいだ管理が必要
             SetUpStageNodeIndex();
             ApplyDataToNodes();
-            MoveAboveNode(_mapData.CurrentStageIndex);
+
+            _inputHandler.OnMoveInput += HandleMove;
+            _inputHandler.OnConfirmInput += PlayTheStage;
+
+            // 初期表示
+            _view.UpdateView(StageNodes[_mapData.CurrentStageIndex]);
         }
 
-        void Update()
+        private void HandleMove(Vector2Int direction)
         {
-            HandleArrowKeyInput();
-            HandleReturnKeyInput();
+            StageNode currentNode = StageNodes[_mapData.CurrentStageIndex];
+            StageNode nextNode = null;
+
+            if (direction == Vector2Int.left) nextNode = currentNode.leftNode;
+            else if (direction == Vector2Int.right) nextNode = currentNode.rightNode;
+            else if (direction == Vector2Int.up) nextNode = currentNode.upNode;
+            else if (direction == Vector2Int.down) nextNode = currentNode.downNode;
+
+            if (nextNode != null)
+            {
+                _mapData.CurrentStageIndex = nextNode.StageIndex;
+                _view.UpdateView(nextNode);
+            }
         }
 
         private void ApplyDataToNodes()
@@ -45,26 +58,6 @@ namespace MapScene
             }
         }
 
-        // 指定ノードへのカメラの移動
-        public void MoveAboveNode(int index)
-        {
-            // ありえないインデックスをはじく
-            if (index < 0 || index >= StageNodes.Length) return;
-
-            //対象ノードのデータ取得
-            StageNode node = StageNodes[index];
-            Vector3 nodePos = node.GetPosition();
-            
-            // カメラ移動
-            _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
-            
-            // カーソル移動
-            cursor.Move(nodePos);
-
-            // 現在地のステージ名の表示を更新
-            _stageNamePanel.SetStageName(node.stageName);
-        }
-
         // ステージ番号の割り振り
         public void SetUpStageNodeIndex()
         {
@@ -74,41 +67,11 @@ namespace MapScene
             }
         }
 
-        // 矢印キー入力による移動処理
-        private void HandleArrowKeyInput()
-        {
-            // 現在ノードと次のノード
-            StageNode nextNode = null;
-            StageNode currentNode = StageNodes[_mapData.CurrentStageIndex];
-
-            // キー入力先に隣接ノードがあるか？
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) nextNode = currentNode.leftNode;
-            else if (Input.GetKeyDown(KeyCode.UpArrow)) nextNode = currentNode.upNode;
-            else if (Input.GetKeyDown(KeyCode.RightArrow)) nextNode = currentNode.rightNode;
-            else if (Input.GetKeyDown(KeyCode.DownArrow)) nextNode = currentNode.downNode;
-
-            // あれば移動する
-            if(nextNode is not null)
-            {
-                _mapData.CurrentStageIndex = nextNode.StageIndex;
-                MoveAboveNode(_mapData.CurrentStageIndex);
-            }
-        }
-
-        // リターン（Enterキー）によるステージ決定処理
-        private void HandleReturnKeyInput()
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                PlayTheStage(_mapData.CurrentStageIndex);
-            }
-        }
-
         // 指定ノードのステージをプレイする
-        private void PlayTheStage(int index)
+        private void PlayTheStage()
         {
             // <最低限>
-            Debug.Log("index : "+index+" のステージを選択");
+            Debug.Log("index : "+_mapData.CurrentStageIndex+" のステージを選択");
             
             // <追加>
             // 対応するステージをプレイ
