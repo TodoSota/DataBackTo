@@ -527,6 +527,7 @@ MonoBehaviour:
   - {fileID: 1208138163}
   - {fileID: 1498069948}
   - {fileID: 1327966205}
+  _mapData: {fileID: 11400000, guid: 1ae50a24a9d14164cafbd2e406bfa328, type: 2}
   _mapCam: {fileID: 151134042}
   DISTANCE_FROM_NODE: 5
   cursor: {fileID: 1365863338}

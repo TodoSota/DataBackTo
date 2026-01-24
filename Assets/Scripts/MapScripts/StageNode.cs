@@ -27,8 +27,6 @@ namespace MapScene
         void Start()
         {
             _renderer = GetComponent<MeshRenderer>();
-
-            UpdateMaterial();
         }
 
         // インデックスが何番目か？をマネージャーから教えるための関数

@@ -8,7 +8,7 @@ namespace MapScene
     {
         public StageNode[] StageNodes;
 
-        private int CurrentStageIndex;
+        [SerializeField]private MapData _mapData;
         [SerializeField] private MapCam _mapCam; 
         [SerializeField] private float DISTANCE_FROM_NODE = 5f; // readonlyを消したもの
         // カーソル
@@ -18,30 +18,50 @@ namespace MapScene
 
         void Start()
         {
-            // ゲームシーンから戻ってきた際はCurrentStageIndexを対応したものにする必要がある
+            // ゲームシーンから戻ってきた際は_mapData.CurrentStageIndexを対応したものにする必要がある
             // スクリプタブルオブジェクトなどを用いてシーンをまたいだ管理が必要
-            MoveAboveNode(CurrentStageIndex);
             SetUpStageNodeIndex();
+            ApplyDataToNodes();
+            MoveAboveNode(_mapData.CurrentStageIndex);
         }
 
-        // Update is called once per frame
         void Update()
         {
             HandleArrowKeyInput();
             HandleReturnKeyInput();
         }
 
+        private void ApplyDataToNodes()
+        {
+            // 配列のサイズが合わない場合
+            if (_mapData.StageClearStatuses == null || _mapData.StageClearStatuses.Length != StageNodes.Length)
+            {
+                _mapData.Initialize(StageNodes.Length);
+            }
+
+            for (int i = 0; i < StageNodes.Length; i++)
+            {
+                StageNodes[i].SetClearFlag(_mapData.StageClearStatuses[i]);
+            }
+        }
+
         // 指定ノードへのカメラの移動
         public void MoveAboveNode(int index)
         {
+            // ありえないインデックスをはじく
             if (index < 0 || index >= StageNodes.Length) return;
 
+            //対象ノードのデータ取得
             StageNode node = StageNodes[index];
             Vector3 nodePos = node.GetPosition();
+            
+            // カメラ移動
             _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
-
+            
+            // カーソル移動
             cursor.Move(nodePos);
 
+            // 現在地のステージ名の表示を更新
             _stageNamePanel.SetStageName(node.stageName);
         }
 
@@ -53,21 +73,25 @@ namespace MapScene
                 StageNodes[i].SetIndex(i);
             }
         }
+
         // 矢印キー入力による移動処理
         private void HandleArrowKeyInput()
         {
+            // 現在ノードと次のノード
             StageNode nextNode = null;
-            StageNode currentNode = StageNodes[CurrentStageIndex];
+            StageNode currentNode = StageNodes[_mapData.CurrentStageIndex];
 
+            // キー入力先に隣接ノードがあるか？
             if (Input.GetKeyDown(KeyCode.LeftArrow)) nextNode = currentNode.leftNode;
             else if (Input.GetKeyDown(KeyCode.UpArrow)) nextNode = currentNode.upNode;
             else if (Input.GetKeyDown(KeyCode.RightArrow)) nextNode = currentNode.rightNode;
             else if (Input.GetKeyDown(KeyCode.DownArrow)) nextNode = currentNode.downNode;
 
+            // あれば移動する
             if(nextNode is not null)
             {
-                CurrentStageIndex = nextNode.StageIndex;
-                MoveAboveNode(CurrentStageIndex);
+                _mapData.CurrentStageIndex = nextNode.StageIndex;
+                MoveAboveNode(_mapData.CurrentStageIndex);
             }
         }
 
@@ -76,14 +100,17 @@ namespace MapScene
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                PlayTheStage(CurrentStageIndex);
+                PlayTheStage(_mapData.CurrentStageIndex);
             }
         }
 
         // 指定ノードのステージをプレイする
         private void PlayTheStage(int index)
         {
+            // <最低限>
             Debug.Log("index : "+index+" のステージを選択");
+            
+            // <追加>
             // 対応するステージをプレイ
             // シーン移動
             // 戻ってきたときは、カレントインデックスを指定すること
