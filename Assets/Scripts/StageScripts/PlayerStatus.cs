@@ -14,9 +14,12 @@ public class PlayerStatus : MonoBehaviour
     // 自動減少値
     public float hpLossPerSecond = 0.5f;
 
-    // ジャンプ管理
+    // アクション管理
     public int currentJumpCount = 0;
     public int maxJumpLimit = 1;
+    public bool isGrounded = true;
+    public float lastDirection = 1f;    // 現在移動している方向。体の向き 1 : -1
+
 
     private Rigidbody rb;
 

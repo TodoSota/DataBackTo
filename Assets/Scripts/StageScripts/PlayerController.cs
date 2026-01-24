@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private PlayerStatus status;
     private float horizontalInput;
-    private bool isGrounded;
+
 
     // 最初のフレームが始まるときに実行
     void Start()
@@ -27,8 +27,17 @@ public class PlayerController : MonoBehaviour
     // 毎フレーム
     void Update()
     {
-        // キー入力を監視
-        horizontalInput = Input.GetAxisRaw("Horizontal");
+        
+        horizontalInput = Input.GetAxisRaw("Horizontal");// 左右方向にキー入力を監視
+        if(horizontalInput > 0 )
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0); // 右向き
+            status.lastDirection = -1;
+        } else if (horizontalInput < 0 )
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0); // 左向き
+            status.lastDirection = 1;
+        }
 
         // ジャンプ入力 : Space 、 接地時のみ呼び出し可能
         if (Input.GetKeyDown(KeyCode.Space) && status.currentJumpCount < status.maxJumpLimit)
@@ -48,7 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         // 上方向に力を加える
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false;
+        status.isGrounded = false;
 
         // Status にジャンプ回数を加算
         status.currentJumpCount++;
@@ -60,7 +69,7 @@ public class PlayerController : MonoBehaviour
         // 接触しているオブジェクトの名前が Ground ならば
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = true;
+            status.isGrounded = true;
             status.ResetJumpConut();
         }
     }
@@ -71,7 +80,7 @@ public class PlayerController : MonoBehaviour
         // 接触しているオブジェクトの名前が Ground ならば
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = false;
+            status.isGrounded = false;
         }
     }
 }
