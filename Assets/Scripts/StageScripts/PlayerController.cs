@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 180, 0); // 左向き
         }
 
-        // ジャンプ入力 : Space 、 接地時のみ呼び出し可能
-        if (Input.GetKeyDown(KeyCode.Space) && status.currentJumpCount < status.maxJumpLimit)
+        // ジャンプ入力 : Space
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
@@ -53,9 +53,24 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        // 上方向に力を加える
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        status.isGrounded = false;
+        // 現在のジャンプ回数が既定の回数以下ならば
+        if (status.currentJumpCount < status.maxJumpLimit)
+        {
+            // 上方向に力を加える
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            status.isGrounded = false;
+        }
+        else // 規定回数を超えていたら、コインを消費して発動
+        {
+            int cost = status.currentJumpCount + 1;
+            if (status.money >= cost)
+            {
+                status.AddMoney(-cost);
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                UnityEngine.Debug.Log("Extra Jump!!");
+            }
+        }
+
 
         // Status にジャンプ回数を加算
         status.currentJumpCount++;
