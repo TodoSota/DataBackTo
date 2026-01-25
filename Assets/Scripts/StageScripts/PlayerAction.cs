@@ -19,6 +19,9 @@ public class PlayerAction : MonoBehaviour
     public float hipdropDamage = 20f;   // 反動ダメージ
     private bool isHipdropping = false;
 
+    // 攻撃力 : 各種行動の際に適宜攻撃力を入力する
+    private int currentPower;
+
     private Rigidbody rb;
     private PlayerStatus status;
 
@@ -38,6 +41,8 @@ public class PlayerAction : MonoBehaviour
             // 地上にいるならば通常攻撃
             if (status.isGrounded)
             {
+                // 攻撃力を 1 に設定
+                currentPower = 1;
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
                     // 強化(射撃)攻撃
@@ -83,11 +88,24 @@ public class PlayerAction : MonoBehaviour
         attackHitbox.SetActive(true);
         attackRenderer.material.color = Color.yellow;
 
-        rb.velocity = new Vector3(0, -hipdropForce, 0);// 落下速度
-        yield return new WaitUntil(() => status.isGrounded);// 着地待機
-        status.ConsumeHp(hipdropDamage);                // 着地自傷ダメージ
-        // 攻撃ダメージはヒットボックスの Trigger にある
+        // 強化行動のヒップドロップ
+        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && status.money >= 10)
+        {
+            currentPower = 50;
+            attackRenderer.material.color = Color.magenta;
+            status.AddMoney(-10);
+            rb.velocity = new Vector3(0, -hipdropForce * 2, 0);// 落下速度
+            yield return new WaitUntil(() => status.isGrounded);// 着地待機
+        }
+        else // 通常時のヒップドロップ
+        {
+            currentPower = 10;
+            rb.velocity = new Vector3(0, -hipdropForce, 0);// 落下速度
+            yield return new WaitUntil(() => status.isGrounded);// 着地待機
+            status.ConsumeHp(hipdropDamage);                // 着地自傷ダメージ
+        }
 
+        // 攻撃ダメージはヒットボックスの Trigger にある
         isHipdropping = false;
         attackHitbox.SetActive(false);
         attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
@@ -97,9 +115,7 @@ public class PlayerAction : MonoBehaviour
     void PerformShiftAttack()
     {
         status.AddMoney(-1);    // お金を消費
-
-        // 弾を生成
-        // 第一引数：何を、第二引数：どこで、第三引数：どの向きで
+        // 弾を生成 | 第一引数：何を、第二引数：どこで、第三引数：どの向きで
         Instantiate(coinPrefab, firePoint.position, transform.rotation);
         UnityEngine.Debug.Log("Shoooooot!!!");
     }
@@ -112,12 +128,12 @@ public class PlayerAction : MonoBehaviour
             if (isHipdropping)
             {
                 UnityEngine.Debug.Log("Hit! HipDrop!");
-                other.GetComponent<EnemyStatus>().TakeDamage(10);
+                other.GetComponent<EnemyStatus>().TakeDamage(currentPower);
             }
             else
             {
                 UnityEngine.Debug.Log("Hit! Attack!");
-                other.GetComponent<EnemyStatus>().TakeDamage(1);
+                other.GetComponent<EnemyStatus>().TakeDamage(currentPower);
             }
 
         }

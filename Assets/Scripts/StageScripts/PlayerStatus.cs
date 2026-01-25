@@ -56,6 +56,7 @@ public class PlayerStatus : MonoBehaviour
     public void AddMoney(int amount)
     {
         money += amount;
+        UnityEngine.Debug.Log("Change Money" + amount);
         money = Mathf.Min(money, MaxMoney);
     }
 
