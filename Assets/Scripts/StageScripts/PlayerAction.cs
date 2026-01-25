@@ -26,10 +26,6 @@ public class PlayerAction : MonoBehaviour
 
     void Update()
     {
-        // ˆÚ“®•ûŒü‚ğ‹L˜^
-        float move = Input.GetAxisRaw("Horizontal");
-        if (move != 0) status.lastDirection = move;
-
         // X - M ƒL[‚ÅUŒ‚
         if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.C) || 
             Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.B) || 
@@ -75,8 +71,7 @@ public class PlayerAction : MonoBehaviour
 
         isHipdropping = false;
         attackHitbox.SetActive(false);
-        attackHitbox.transform.localPosition = new Vector3(status.lastDirection, 0, 0);
-        UnityEngine.Debug.Log("check");
+        attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
     }
 
     // UŒ‚”»’è‚ÌÚGˆ—

@@ -32,11 +32,9 @@ public class PlayerController : MonoBehaviour
         if(horizontalInput > 0 )
         {
             transform.rotation = Quaternion.Euler(0, 0, 0); // 右向き
-            status.lastDirection = -1;
         } else if (horizontalInput < 0 )
         {
             transform.rotation = Quaternion.Euler(0, 180, 0); // 左向き
-            status.lastDirection = 1;
         }
 
         // ジャンプ入力 : Space 、 接地時のみ呼び出し可能

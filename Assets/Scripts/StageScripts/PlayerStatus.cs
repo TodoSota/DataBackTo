@@ -18,8 +18,6 @@ public class PlayerStatus : MonoBehaviour
     public int currentJumpCount = 0;
     public int maxJumpLimit = 1;
     public bool isGrounded = true;
-    public float lastDirection = 1f;    // Œ»İˆÚ“®‚µ‚Ä‚¢‚é•ûŒüB‘Ì‚ÌŒü‚« 1 : -1
-
 
     private Rigidbody rb;
 
