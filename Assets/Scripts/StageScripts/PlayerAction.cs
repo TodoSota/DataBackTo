@@ -10,6 +10,10 @@ public class PlayerAction : MonoBehaviour
     public MeshRenderer attackRenderer; // 色を変えるためのレンダラー
     public float attackDuration = 0.2f; // 光る時間
 
+    // 強化(射撃)攻撃
+    public GameObject coinPrefab;
+    public Transform firePoint;
+
     // ヒップドロップ
     public float hipdropForce = 20f;    // 落下速度
     public float hipdropDamage = 20f;   // 反動ダメージ
@@ -26,10 +30,6 @@ public class PlayerAction : MonoBehaviour
 
     void Update()
     {
-        // 移動方向を記録
-        float move = Input.GetAxisRaw("Horizontal");
-        if (move != 0) status.lastDirection = move;
-
         // X - M キーで攻撃
         if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.C) || 
             Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.B) || 
@@ -38,7 +38,22 @@ public class PlayerAction : MonoBehaviour
             // 地上にいるならば通常攻撃
             if (status.isGrounded)
             {
-                StartCoroutine(PerformAttack());
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    // 強化(射撃)攻撃
+                    if (status.money >= 1)
+                    {
+                        // お金があるなら発火
+                        PerformShiftAttack();
+                    } else
+                    {
+                        // ないなら通知
+                        UnityEngine.Debug.Log("I have no money...");
+                    }
+                } else {
+                    // 通常攻撃
+                    StartCoroutine(PerformAttack());
+                }
             }
             // 空中ならばヒップドロップ
             else
@@ -75,8 +90,18 @@ public class PlayerAction : MonoBehaviour
 
         isHipdropping = false;
         attackHitbox.SetActive(false);
-        attackHitbox.transform.localPosition = new Vector3(status.lastDirection, 0, 0);
-        UnityEngine.Debug.Log("check");
+        attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
+    }
+
+    // 強化(射撃)攻撃
+    void PerformShiftAttack()
+    {
+        status.AddMoney(-1);    // お金を消費
+
+        // 弾を生成
+        // 第一引数：何を、第二引数：どこで、第三引数：どの向きで
+        Instantiate(coinPrefab, firePoint.position, transform.rotation);
+        UnityEngine.Debug.Log("Shoooooot!!!");
     }
 
     // 攻撃判定の接触処理
