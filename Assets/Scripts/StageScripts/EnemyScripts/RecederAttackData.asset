@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 5029801894057164076, guid: 6706798282e7ab041a45f8ac1e3ab51d, type: 3}
   ActionLogic: {fileID: 11400000, guid: 2789ae21d436d4b40b69ce4daec8aabb, type: 2}
-  LifeTime: 0
-  Damage: 0
-  Speed: 0
+  LifeTime: 10
+  Damage: 1
+  Speed: 5
   TargetLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192

@@ -8,35 +8,44 @@ public class Floater : EnemyControllerAbstract
     public Vector3 pointB = new Vector3(0,0,0);
     private Vector3 startPosition;
 
+    private bool toPointA = true;
+
     [SerializeField] private bool pingPong = false;
     private WaypointPath _wayPointPath;
+    private Vector3 vecAB;
+    private Vector3 vecBA;
 
     protected override void Awake()
     {
         base.Awake();
         _wayPointPath = GetComponent<WaypointPath>();
         startPosition = transform.position;
+        vecAB = (GetWorldB() - GetWorldA()).normalized;
+        vecBA = (GetWorldA() - GetWorldB()).normalized;
         SetupStates();
     }
 
     protected override void SetupStates()
     {
-        if (_wayPointPath)
-        {
-            enemyPatrolState = new EnemyPingPongState(this);
-            enemyAttackState = new EnemyAttackState(this);
-            enemyCoolDownState = new EnemyCoolDownState(this);
-            enemyDamagedState = new EnemyDamagedState(this);
-            enemyDieState = new EnemyDieState(this);
-        }
-        else
-        {
             enemyPatrolState = new EnemyPatrolState(this);
             enemyAttackState = new EnemyAttackState(this);
             enemyCoolDownState = new EnemyCoolDownState(this);
             enemyDamagedState = new EnemyDamagedState(this);
             enemyDieState = new EnemyDieState(this);
+    }
+
+    public override void Patrol()
+    {
+        Vector3 destination = toPointA ? GetWorldA() : GetWorldB();
+        float distance = Vector3.Distance(transform.position, destination);
+
+        if(distance < 0.05f) 
+        {
+            toPointA = !toPointA;
         }
+        Vector3 dir = toPointA ? vecBA : vecAB;
+
+        Move(dir, speed);
     }
 
     public override void Move(Vector3 dir, float speed)
@@ -49,13 +58,10 @@ public class Floater : EnemyControllerAbstract
     public override void Attack()
     {
         base.Attack();
-        ChangeState(enemyCoolDownState);
     }
 
-    private void Shoot()
-    {
-        
-    }
+    private Vector3 GetWorldA() => _wayPointPath.GetWorldA();
+    private Vector3 GetWorldB() => _wayPointPath.GetWorldB();
 
     // ˆÚ“®‚ðŠm”F‚·‚é‚½‚ß‚Ì‰ÂŽ‹‰»
     protected override void OnDrawGizmos()

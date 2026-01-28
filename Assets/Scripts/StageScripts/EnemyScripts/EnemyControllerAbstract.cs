@@ -9,7 +9,7 @@ public class EnemyControllerAbstract : MonoBehaviour
 {
     // 敵のステータス
     public EnemyStatus Status;
-    public float chaseRate { get; protected set; } = 2.0f;
+    [SerializeField]public float ChaseRate = 2.0f;
     public float speed;
 
     // ステートパターン用の現在のステート
@@ -79,6 +79,7 @@ public class EnemyControllerAbstract : MonoBehaviour
     }
 
     public virtual void Move(Vector3 dir, float speed){}
+    public virtual void Patrol(){}
 
     public virtual void Attack()=>Status.MainAttack?.ActionLogic.Execute(this, Status.MainAttack);
 

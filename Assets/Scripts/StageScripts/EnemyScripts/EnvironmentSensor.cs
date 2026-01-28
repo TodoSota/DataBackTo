@@ -13,7 +13,6 @@ public class EnvironmentSensor : MonoBehaviour
     private void Awake()
     {
         col = GetComponent<Collider>();
-        CalculateSensorBounds();
     }
     // ŠR‚©‚Ç‚¤‚©‚ð”»’è‚·‚é‹@”\
     public bool IsAtLedge()
@@ -37,18 +36,14 @@ public class EnvironmentSensor : MonoBehaviour
         return Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.right, distanceToEdge + 0.2f, groundLayer);
     }
 
-    private void CalculateSensorBounds()
-    {
-        Bounds bounds = col.bounds;
-        _modelRadius = bounds.extents.x * 0.8f;
-        _bottomOffset = new Vector3(0, -bounds.extents.y, 0);
-    }
-
     public bool IsGrounded()
     {
-        Vector3 checkPos = transform.position + _bottomOffset;
-        return Physics.CheckSphere(checkPos, _modelRadius, groundLayer);
-        
+        Vector3 checkPos = transform.position + new Vector3(0, -col.bounds.extents.y, 0);
+
+        float width = col.bounds.extents.x * 0.8f;
+        Vector3 halfExtents = new Vector3(width, 0.05f, 0.1f);
+
+        return Physics.CheckBox(checkPos, halfExtents, transform.rotation, groundLayer);
     }
 
     private void OnDrawGizmosSelected()
@@ -56,6 +51,18 @@ public class EnvironmentSensor : MonoBehaviour
         if (col == null) col = GetComponent<Collider>();
         Bounds bounds = col.bounds;
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0, -bounds.extents.y, 0), bounds.extents.x * 0.8f);
+        
+        Vector3 checkPos = transform.position + new Vector3(0, -bounds.extents.y, 0);
+
+        float width = bounds.extents.x * 0.8f; // X
+        float thickness = 0.05f;              // Y
+        float depth = 0.1f;                  // Z
+        
+        Vector3 halfExtents = new Vector3(width, thickness, depth); 
+
+        Matrix4x4 previousMatrix = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(checkPos, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, halfExtents * 2);
+        Gizmos.matrix = previousMatrix; 
     }
 }

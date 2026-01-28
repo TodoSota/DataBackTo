@@ -23,6 +23,8 @@ public class EnemyAttackState : IEnemyState
         }
 
         _enemy.Attack();
+        _enemy.ChangeState(_enemy.enemyCoolDownState);
+
     }
     public void OnExit()
     {

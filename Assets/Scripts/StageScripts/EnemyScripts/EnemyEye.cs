@@ -40,7 +40,7 @@ public class EnemyEye
             Vector3 dirToTarget = (target.position - _owner.position).normalized;
 
             // 2. Šp“x‚Ì”»’èi©•ª‚Ì³–Ê‚©‚çŒ©‚Ä‹–ìŠp“à‚©j
-            if (Vector3.Angle(_owner.right, dirToTarget) < ViewAngle / 2)
+            if (Vector3.Angle(GazeDirection, dirToTarget) < ViewAngle / 2)
             {
                 float dstToTarget = Vector3.Distance(_owner.position, target.position);
 

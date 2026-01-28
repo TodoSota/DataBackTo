@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Status: {fileID: 730460712}
+  ChaseRate: 4
   speed: 0
   _eye:
     ViewRadius: 10
@@ -385,8 +386,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1
-  Speed: 2
-  CoolTime: 3
+  Speed: 3
+  CoolTime: 2
   MainAttack: {fileID: 11400000, guid: 837cf3a5e07916a45a49364fa507cd2f, type: 2}
 --- !u!54 &730460713
 Rigidbody:
@@ -495,7 +496,7 @@ Transform:
   m_GameObject: {fileID: 730460709}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.01, y: 1.34, z: 0}
+  m_LocalPosition: {x: 3.01, y: 1.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -537,6 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Status: {fileID: 770144733}
+  ChaseRate: 2
   speed: 0
   _eye:
     ViewRadius: 10
@@ -856,6 +858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Status: {fileID: 904442677}
+  ChaseRate: 2
   speed: 0
   _eye:
     ViewRadius: 10
@@ -994,7 +997,7 @@ Transform:
   m_GameObject: {fileID: 904442674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.8124049, y: 4.353546, z: 0}
+  m_LocalPosition: {x: 0, y: 5.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1013,8 +1016,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usePath: 1
-  pointA: {x: 6.7964478, y: 2.120819, z: 0}
-  pointB: {x: -6.7964478, y: -2.120819, z: 0}
+  pointA: {x: 7.4001503, y: -0.04244709, z: 0}
+  pointB: {x: -7.4001503, y: 0.04244709, z: 0}
 --- !u!114 &904442684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1428,7 +1431,7 @@ GameObject:
   - component: {fileID: 1631558086}
   - component: {fileID: 1631558088}
   m_Layer: 8
-  m_Name: Enemy
+  m_Name: Chaser
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1551,6 +1554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Status: {fileID: 1631558084}
+  ChaseRate: 2
   speed: 0
   _eye:
     ViewRadius: 10

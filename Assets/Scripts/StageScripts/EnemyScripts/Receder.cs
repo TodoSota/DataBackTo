@@ -13,10 +13,30 @@ public class Receder : EnemyControllerAbstract
         enemyDieState = new EnemyDieState(this);
     }
 
+    public override void Patrol()
+    {
+        if(!IsGrounded()) return;
+        
+        bool hasObstacle = IsHittingWall();
+
+        if (!IsFlying)
+        {
+            hasObstacle |= IsAtLedge();
+        }
+
+        if (hasObstacle)
+        {
+            FlipX();
+            return;
+        }
+
+        Move(transform.right, speed);
+    }
+
     public override void Move(Vector3 dir, float speed)
     {
         Vector3 direction = dir;
-        if(IsFlying) direction.y = 0;
-        rb.velocity = dir.normalized * speed;
+        if(!IsFlying) direction.y = 0;
+        rb.velocity = direction.normalized * speed;
     }
 }
