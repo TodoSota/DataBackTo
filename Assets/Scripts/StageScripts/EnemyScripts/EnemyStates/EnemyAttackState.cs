@@ -18,7 +18,7 @@ public class EnemyAttackState : IEnemyState
         if(_enemy.Target is null)
         {
             _enemy.ChangeState(_enemy.enemyPatrolState);
-            Debug.Log("<color=red>enemy<color> : Œ©Ž¸‚Á‚½...");
+            Debug.Log("<color=red>enemy</color> : Œ©Ž¸‚Á‚½...");
             return;
         }
 

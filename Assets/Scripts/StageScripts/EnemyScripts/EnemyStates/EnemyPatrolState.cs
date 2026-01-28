@@ -15,7 +15,7 @@ public class EnemyPatrolState : IEnemyState
     {
         if (_enemy.Target is not null)
         {
-            Debug.Log("<color=red>enemy<color> : Playerを発見！！");
+            Debug.Log("<color=red>enemy</color> : Playerを発見！！");
             _enemy.ChangeState(_enemy.enemyAttackState);
             return;
         }
