@@ -36,7 +36,7 @@ public class HomingBullet : MonoBehaviour, IBullet
             if (other.TryGetComponent<PlayerController>(out var player))
             {
                 //　<追加>ダメージ処理
-                Debug.Log("<color=blue>Player<color>にダメージ!!");
+                Debug.Log("<color=blue>Player</color>にダメージ!!");
             }
 
             // 当たったのが設定したレイヤーなら弾を消す
