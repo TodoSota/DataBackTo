@@ -19,21 +19,7 @@ public class EnemyPatrolState : IEnemyState
             _enemy.ChangeState(_enemy.enemyAttackState);
             return;
         }
-
-        bool hasObstacle = _enemy.IsHittingWall();
-
-        if (!_enemy.IsFlying)
-        {
-            hasObstacle |= _enemy.IsAtLedge();
-        }
-   
-        if (hasObstacle)
-        {
-            _enemy.FlipX();
-            return;
-        }
-
-        _enemy.Move(_enemy.transform.right, _enemy.speed);
+        _enemy.Patrol();
     }
 
     public void OnExit()

@@ -22,17 +22,21 @@ public class Hopper : EnemyControllerAbstract, IHoppable
 
     protected override void SetupStates()
     {
-        enemyPatrolState = new EnemyHoppingState(this);
+        enemyPatrolState = new EnemyPatrolState(this);
         enemyAttackState = new EnemyAttackState(this);
         enemyCoolDownState = new EnemyCoolDownState(this);
         enemyDamagedState = new EnemyDamagedState(this);
         enemyDieState = new EnemyDieState(this);
     }
 
+    public override void Patrol()
+    {
+        if(!IsGrounded()) return;
+        Move(_hopDir, HopPower);
+    }
+
     public override void Move(Vector3 dir, float speed)
     {
         rb.velocity = dir.normalized * speed;
     }
-
-    public bool IsGrounded() => sensor.IsGrounded();
 }

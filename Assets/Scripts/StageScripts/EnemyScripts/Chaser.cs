@@ -20,6 +20,24 @@ public class Chaser : EnemyControllerAbstract
         else if (dir.x < -0.01f) transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
+    public override void Patrol()
+    {
+        bool hasObstacle = IsHittingWall();
+
+        if (!IsFlying)
+        {
+            hasObstacle |= IsAtLedge();
+        }
+   
+        if (hasObstacle)
+        {
+            FlipX();
+            return;
+        }
+
+        Move(transform.right, speed);
+    }
+
     public override void Attack()
     {
         if (Target is null)
@@ -30,4 +48,6 @@ public class Chaser : EnemyControllerAbstract
         }
         Status.MainAttack?.ActionLogic.Execute(this, Status.MainAttack);
     }
+
+
 }
