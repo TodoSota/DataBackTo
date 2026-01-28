@@ -18,6 +18,7 @@ public class RecederAction : AttackAction
 
         // ’eƒf[ƒ^‚Ì’“ü
         IBullet script = bullet.GetComponent<IBullet>();
-        script.SetUp(data);
+        Transform target = owner.Target;
+        script.SetUp(data, target);
     }
 }
