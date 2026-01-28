@@ -16,7 +16,8 @@ public class FloaterAction : AttackAction
         GameObject bullet = Instantiate(data.BulletPrefab, owner.transform.position, rotation);
 
         // íeÉfÅ[É^ÇÃíçì¸
-        NormalBullet script = bullet.GetComponent<NormalBullet>();
-        script.SetUp(data);
+        IBullet script = bullet.GetComponent<IBullet>();
+        Transform target = owner.Target;
+        script.SetUp(data, target);
     }
 }

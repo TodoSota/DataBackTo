@@ -7,5 +7,5 @@ public interface IBullet
     AttackData Data { get; }
     Vector3 MoveDirection { get; }
 
-    void SetUp(AttackData data);
+    void SetUp(AttackData data, Transform target);
 }
