@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "Enemy/SihgleShotAction")]
-public class SihgleShotAction : AttackAction
+[CreateAssetMenu(menuName = "Enemy/RecederAction")]
+public class RecederAction : AttackAction
 {
     public override void Execute(EnemyControllerAbstract owner, AttackData data)
     {
         Vector3 dir = (owner.Target.position - owner.transform.position).normalized;
+        owner.Move(-dir, owner.speed * owner.chaseRate);
 
         // 弾の方向をターゲットに向けて回転
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -16,7 +17,7 @@ public class SihgleShotAction : AttackAction
         GameObject bullet = Instantiate(data.BulletPrefab, owner.transform.position, rotation);
 
         // 弾データの注入
-        NormalBullet script = bullet.GetComponent<NormalBullet>();
+        IBullet script = bullet.GetComponent<IBullet>();
         script.SetUp(data);
     }
 }

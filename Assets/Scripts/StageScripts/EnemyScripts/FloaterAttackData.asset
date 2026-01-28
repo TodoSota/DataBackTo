@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 719e1d6f9a61dc4418133f7268ff75eb, type: 3}
-  m_Name: BoddyAttack
+  m_Name: FloaterAttackData
   m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 0}
-  ActionLogic: {fileID: 11400000, guid: e13a4a0346bb8f34aa72d5fc892fa6af, type: 2}
-  LifeTime: 0
+  BulletPrefab: {fileID: 5029801894057164076, guid: 6706798282e7ab041a45f8ac1e3ab51d, type: 3}
+  ActionLogic: {fileID: 11400000, guid: 3794a1ec4ab32c345ba37b025a753e7b, type: 2}
+  LifeTime: 5
   Damage: 1
-  Speed: 0
+  Speed: 3
   TargetLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
