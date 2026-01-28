@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hopper : EnemyControllerAbstract, IHoppable
+public class Hopper : EnemyControllerAbstract
 {
     [field:SerializeField] public float HopAngle{ get; private set; } = 45f;
     public Vector3 _hopDir { get; private set; }
