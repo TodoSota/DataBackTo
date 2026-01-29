@@ -1062,6 +1062,10 @@ PrefabInstance:
       value: 1-1
       objectReference: {fileID: 0}
     - target: {fileID: 4690657653029946368, guid: 82ec0ee325545d3448271027cedae12f, type: 3}
+      propertyPath: StageName
+      value: SampleScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4690657653029946368, guid: 82ec0ee325545d3448271027cedae12f, type: 3}
       propertyPath: isCleared
       value: 0
       objectReference: {fileID: 0}

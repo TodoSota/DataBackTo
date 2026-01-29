@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private PlayerStatus status;
     private float horizontalInput;
 
+    // 復活に利用する安全地点の保存
+    private Vector3 lastSafePosition;
+
 
     // 最初のフレームが始まるときに実行
     void Start()
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour
         {
             status.isGrounded = true;
             status.ResetJumpConut();
+            SaveLastSafepoint(transform.position);
         }
     }
 
@@ -95,5 +99,12 @@ public class PlayerController : MonoBehaviour
         {
             status.isGrounded = false;
         }
+    }
+
+    // 復活場所を保存
+    // <追加>バグを防ぐなら、ステージ開始時にそのポジションを保存しておといいかも
+    public void SaveLastSafepoint(Vector3 position)
+    {
+        lastSafePosition = position;
     }
 }
