@@ -17,7 +17,7 @@ namespace MapScene
             // 各コンポーネントへの命令をまとめる
             _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
             _cursor.Move(nodePos);
-            _stageNamePanel.SetStageName(node.stageName);
+            _stageNamePanel.SetStageName(node.name);
         }
     }
 }
