@@ -17,18 +17,13 @@ public class Respawner : MonoBehaviour
     }
     public void SetRespawner(Vector3 position)
     {
-        SearchSafePlace(position);
         gameObject.SetActive(true);
+        transform.position = position;
         _timer.Start(_lifeTime);
     }
 
     public void DisappearRespawner()
     {
         gameObject.SetActive(false);
-    }
-
-    private void SearchSafePlace(Vector3 position)
-    {
-        
     }
 }
