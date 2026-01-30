@@ -29,6 +29,7 @@ public class PlayerAction : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         status = GetComponent<PlayerStatus>();
+        status.dieAction += OnPlayerDeath;
     }
 
     void Update()
@@ -72,6 +73,7 @@ public class PlayerAction : MonoBehaviour
     // 通常攻撃のコルーチン
     IEnumerator PerformAttack()
     {
+        if (!CanAttack()) yield break;
         attackHitbox.SetActive(true);                   // 攻撃範囲を表示
         attackRenderer.material.color = Color.yellow;   // 色を黄色に
         yield return new WaitForSeconds(attackDuration);// 攻撃時間分
@@ -81,6 +83,7 @@ public class PlayerAction : MonoBehaviour
     // ヒップドロップのコルーチン
     IEnumerator PerformHipdrop()
     {
+        if (!CanAttack()) yield break;
         isHipdropping = true;
 
         // 攻撃判定を直下に移動
@@ -114,10 +117,15 @@ public class PlayerAction : MonoBehaviour
     // 強化(射撃)攻撃
     void PerformShiftAttack()
     {
+        if (!CanAttack()) return;
         status.AddMoney(-1);    // お金を消費
         // 弾を生成 | 第一引数：何を、第二引数：どこで、第三引数：どの向きで
         Instantiate(coinPrefab, firePoint.position, transform.rotation);
         UnityEngine.Debug.Log("Shoooooot!!!");
+    }
+    private bool CanAttack()
+    {
+        return !(status.isDead || rb.isKinematic);
     }
 
     // 攻撃判定の接触処理
@@ -137,5 +145,18 @@ public class PlayerAction : MonoBehaviour
             }
 
         }
+    }
+
+    private void OnPlayerDeath()
+    {
+        StopAllCoroutines();
+        attackHitbox.SetActive(false);
+        attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
+        isHipdropping = false;
+    }
+
+    private void OnRespawn()
+    {
+        
     }
 }
