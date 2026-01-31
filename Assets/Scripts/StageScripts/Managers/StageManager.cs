@@ -27,7 +27,7 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         var PlayerStatus = _player.GetComponent<PlayerStatus>();
-        PlayerStatus.dieAction+=OnDeath;
+        PlayerStatus.dieAction+=OnPlayerDeath;
     }
 
     public void ClearStage()
@@ -52,7 +52,13 @@ public class StageManager : MonoBehaviour
         yield return null;
     }
 
-    public void OnDeath()
+    public void Continue()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
+    }
+
+    public void OnPlayerDeath()
     {
         StartCoroutine(DeathSequence());
     }
