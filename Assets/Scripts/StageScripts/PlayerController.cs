@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private PlayerStatus status;
     private float horizontalInput;
 
+    // 復活に利用する安全地点の保存
+    public Vector3 lastSafePosition { get; private set; }
 
     // 最初のフレームが始まるときに実行
     void Start()
@@ -22,6 +24,8 @@ public class PlayerController : MonoBehaviour
         // GameObject についている RigidBody を取得
         rb = GetComponent<Rigidbody>();
         status = GetComponent<PlayerStatus>();
+        status.dieAction+=OnPlayerDeath;
+        SetUp();
     }
 
     // 毎フレーム
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
     // 物理演算用のループ : 一定時間ごとに呼び出し
     void FixedUpdate()
     {
+        if(rb.isKinematic) return;
         // 平面移動
         rb.velocity = new Vector3(horizontalInput * moveSpeed, rb.velocity.y, 0);
     }
@@ -76,6 +81,34 @@ public class PlayerController : MonoBehaviour
         status.currentJumpCount++;
     }
 
+    void Stop()
+    {
+        rb.velocity = Vector3.zero;
+    }
+
+    void OnPlayerDeath()
+    {
+        rb.isKinematic = true;
+    }
+
+    void SetUp()
+    {
+        rb.isKinematic = false;
+        Stop();
+    }
+
+    void KnockBack()
+    {
+        
+    }
+
+    public void Warp(Vector3 position)
+    {
+        Debug.Log("warp");
+        SetUp();
+        rb.position = position;
+    }
+
     // 何かに接触したら
     private void OnCollisionStay(Collision collision)
     {
@@ -84,6 +117,7 @@ public class PlayerController : MonoBehaviour
         {
             status.isGrounded = true;
             status.ResetJumpConut();
+            SaveLastSafepoint(transform.position);
         }
     }
 
@@ -95,5 +129,12 @@ public class PlayerController : MonoBehaviour
         {
             status.isGrounded = false;
         }
+    }
+
+    // 復活場所を保存
+    // <追加>バグを防ぐなら、ステージ開始時にそのポジションを保存しておといいかも
+    public void SaveLastSafepoint(Vector3 position)
+    {
+        lastSafePosition = position;
     }
 }

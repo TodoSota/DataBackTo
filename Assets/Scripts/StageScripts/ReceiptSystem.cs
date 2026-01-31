@@ -71,9 +71,9 @@ public class ReceiptSystem : MonoBehaviour
         UnityEngine.Debug.Log("Receipt Done!! : " + receiptStack.Count);
     }
 
-    void LoadState()
+    public bool LoadState()
     {
-        if (receiptStack.Count <= 0) return;    // 所持がなければ実行不可
+        if (receiptStack.Count <= 0) return false;    // 所持がなければ実行不可
 
         // 最新のデータを取り出す
         int lastIndex = receiptStack.Count - 1;
@@ -89,5 +89,6 @@ public class ReceiptSystem : MonoBehaviour
 
         UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
         status.DisplayState();
+        return true;
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
+using System;
 using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
@@ -10,6 +9,7 @@ public class PlayerStatus : MonoBehaviour
     public float hp = 100f;
     public int money = 0;
     public const int MaxMoney = 50;
+    public bool isDead = false;
 
     // 自動減少値
     public float hpLossPerSecond = 0.5f;
@@ -18,6 +18,9 @@ public class PlayerStatus : MonoBehaviour
     public int currentJumpCount = 0;
     public int maxJumpLimit = 1;
     public bool isGrounded = true;
+
+    // アクションイベント
+    public event Action dieAction;
 
     private Rigidbody rb;
 
@@ -34,7 +37,7 @@ public class PlayerStatus : MonoBehaviour
             ConsumeHp(hpLossPerSecond * Time.deltaTime);
         }
 
-        if (hp <= 0)
+        if (hp <= 0 && !isDead)
         {
             Die();
         }
@@ -53,6 +56,13 @@ public class PlayerStatus : MonoBehaviour
         hp = Mathf.Max(hp, 0);
     }
 
+    public void InstantKill()
+    {
+        if (hp <= 0) return;
+
+        hp = 0;
+    }
+
     public void AddMoney(int amount)
     {
         money += amount;
@@ -63,6 +73,17 @@ public class PlayerStatus : MonoBehaviour
     void Die()
     {
         UnityEngine.Debug.Log("Died!!");
+        isDead = true;
+        dieAction?.Invoke();
+    }
+
+    public bool Respawn()
+    {
+        var ReceiptSystem = GetComponent<ReceiptSystem>();
+        bool done = ReceiptSystem.LoadState();
+        
+        if(done)isDead = false;
+        return done;
     }
 
     public void ResetJumpConut()
