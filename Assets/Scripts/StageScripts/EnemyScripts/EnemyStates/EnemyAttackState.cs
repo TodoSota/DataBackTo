@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemyAttackState : IEnemyState
 {
-    private EnemyControllerAbstract _enemy;
+    private EnemyController _enemy;
 
     // コンストラクタ
-    public EnemyAttackState(EnemyControllerAbstract enemy) => _enemy = enemy;
+    public EnemyAttackState(EnemyController enemy) => _enemy = enemy;
     public void OnEnter()
     {
         

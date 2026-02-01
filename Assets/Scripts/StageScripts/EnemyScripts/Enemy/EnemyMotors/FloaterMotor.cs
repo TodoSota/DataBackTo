@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Floater : EnemyControllerAbstract
+public class FloaterMotor : EnemyMotor
 {
     public Vector3 pointA = new Vector3(0,0,0);
     public Vector3 pointB = new Vector3(0,0,0);
@@ -22,16 +22,6 @@ public class Floater : EnemyControllerAbstract
         startPosition = transform.position;
         vecAB = (GetWorldB() - GetWorldA()).normalized;
         vecBA = (GetWorldA() - GetWorldB()).normalized;
-        SetupStates();
-    }
-
-    protected override void SetupStates()
-    {
-            enemyPatrolState = new EnemyPatrolState(this);
-            enemyAttackState = new EnemyAttackState(this);
-            enemyCoolDownState = new EnemyCoolDownState(this);
-            enemyDamagedState = new EnemyDamagedState(this);
-            enemyDieState = new EnemyDieState(this);
     }
 
     public override void Patrol()
@@ -45,7 +35,7 @@ public class Floater : EnemyControllerAbstract
         }
         Vector3 dir = toPointA ? vecBA : vecAB;
 
-        Move(dir, speed);
+        Move(dir, status.Speed);
     }
 
     public override void Move(Vector3 dir, float speed)
@@ -55,18 +45,12 @@ public class Floater : EnemyControllerAbstract
         rb.MovePosition(nextPosition);
     }
 
-    public override void Attack()
-    {
-        base.Attack();
-    }
-
     private Vector3 GetWorldA() => _wayPointPath.GetWorldA();
     private Vector3 GetWorldB() => _wayPointPath.GetWorldB();
 
     // ˆÚ“®‚ðŠm”F‚·‚é‚½‚ß‚Ì‰ÂŽ‹‰»
-    protected override void OnDrawGizmos()
+    protected void OnDrawGizmos()
     {
-        base.OnDrawGizmos();
         if(pingPong) return;
         Gizmos.color = Color.cyan;
         Vector3 pos = Application.isPlaying ? startPosition : transform.position;

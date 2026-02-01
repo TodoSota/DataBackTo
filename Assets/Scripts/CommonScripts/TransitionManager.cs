@@ -33,12 +33,6 @@ public class TransitionManager : MonoBehaviour
         _generator = GetComponent<CodeGenerator>();
     }
 
-
-    void Start()
-    {
-        string testText = "test text";
-        StartTransition(testText);
-    }
     public void StartTransition(string text)
     {
         _text.text = text;

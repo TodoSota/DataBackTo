@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyCoolDownState : IEnemyState
 {
-    private EnemyControllerAbstract _enemy;
+    private EnemyController _enemy;
     private Timer timer;
 
     // コンストラクタ
-    public EnemyCoolDownState(EnemyControllerAbstract enemy) => _enemy = enemy;
+    public EnemyCoolDownState(EnemyController enemy) => _enemy = enemy;
     public void OnEnter()
     {
         timer = new Timer();

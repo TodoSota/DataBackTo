@@ -4,10 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/RecederAction")]
 public class RecederAction : AttackAction
 {
-    public override void Execute(EnemyControllerAbstract owner, AttackData data)
+    public override void Execute(EnemyController owner, AttackData data)
     {
         Vector3 dir = (owner.Target.position - owner.transform.position).normalized;
-        owner.Move(-dir, owner.speed * owner.ChaseRate);
+        owner.Move(-dir, owner.Status.Speed * owner.ChaseRate);
 
         // 弾の方向をターゲットに向けて回転
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -17,7 +17,7 @@ public class RecederAction : AttackAction
         GameObject bullet = Instantiate(data.BulletPrefab, owner.transform.position, rotation);
 
         // 弾データの注入
-        IBullet script = bullet.GetComponent<IBullet>();
+        BulletAbstract script = bullet.GetComponent<BulletAbstract>();
         Transform target = owner.Target;
         script.SetUp(data, target);
     }
