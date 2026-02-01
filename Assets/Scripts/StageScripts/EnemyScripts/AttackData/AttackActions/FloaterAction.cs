@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/SihgleShotAction")]
 public class FloaterAction : AttackAction
 {
-    public override void Execute(EnemyControllerAbstract owner, AttackData data)
+    public override void Execute(EnemyController owner, AttackData data)
     {
         Vector3 dir = (owner.Target.position - owner.transform.position).normalized;
 
@@ -16,7 +16,7 @@ public class FloaterAction : AttackAction
         GameObject bullet = Instantiate(data.BulletPrefab, owner.transform.position, rotation);
 
         // íeÉfÅ[É^ÇÃíçì¸
-        IBullet script = bullet.GetComponent<IBullet>();
+        BulletAbstract script = bullet.GetComponent<BulletAbstract>();
         Transform target = owner.Target;
         script.SetUp(data, target);
     }

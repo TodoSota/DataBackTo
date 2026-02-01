@@ -5,11 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class EnemySelfDamagedOnTouch : MonoBehaviour
 {
-    private EnemyControllerAbstract _controller;
+    private EnemyController _controller;
 
     private void Awake()
     {
-        _controller = GetComponent<EnemyControllerAbstract>();
+        _controller = GetComponent<EnemyController>();
     }
 
     private void OnCollisionEnter(Collision collision)

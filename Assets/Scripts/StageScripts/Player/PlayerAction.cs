@@ -136,12 +136,12 @@ public class PlayerAction : MonoBehaviour
             if (isHipdropping)
             {
                 UnityEngine.Debug.Log("Hit! HipDrop!");
-                other.GetComponent<EnemyStatus>().TakeDamage(currentPower);
+                other.GetComponent<EnemyController>().TakeDamage(currentPower, transform.position);
             }
             else
             {
                 UnityEngine.Debug.Log("Hit! Attack!");
-                other.GetComponent<EnemyStatus>().TakeDamage(currentPower);
+                other.GetComponent<EnemyController>().TakeDamage(currentPower, transform.position);
             }
 
         }
