@@ -14,6 +14,7 @@ public abstract class EnemyMotor : MonoBehaviour {
         sensor = GetComponent<EnvironmentSensor>();
         controller = GetComponent<EnemyController>();
     }
+
     public abstract void Move(Vector3 dir, float speed);
     public virtual void Stop() => rb.velocity = Vector3.zero;
 
@@ -55,7 +56,6 @@ public abstract class EnemyMotor : MonoBehaviour {
         rb.AddForce(kbDir * 5f, ForceMode.VelocityChange);
 
         yield return new WaitForSeconds(0.2f);
-
     }
 }
 

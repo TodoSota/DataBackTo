@@ -83,7 +83,7 @@ public class EnemyController : MonoBehaviour
         if (newState == null || _currentState == newState) return;
         _currentState?.OnExit();
         _currentState = newState;
-        Debug.Log($"<color=red>{gameObject.name}</color> が{newState.GetType().Name}状態へ移行！！");
+        //Debug.Log($"<color=red>{gameObject.name}</color> が{newState.GetType().Name}状態へ移行！！");
         _currentState.OnEnter();
     }
 
@@ -95,6 +95,8 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(int amount, Vector3 AttackerPos)
     {
+        if(_currentState == enemyDamagedState) return;
+        
         LastHitPos = AttackerPos;
         Status.TakeDamage(amount);
         ChangeState(enemyDamagedState);

@@ -154,6 +154,7 @@ MonoBehaviour:
   Speed: 2
   CoolTime: 3
   MainAttack: {fileID: 11400000, guid: a5fa62d9f9cabd749a52eb8ca5424016, type: 2}
+  TouchDamage: 1
 --- !u!114 &4374606921743047614
 MonoBehaviour:
   m_ObjectHideFlags: 0

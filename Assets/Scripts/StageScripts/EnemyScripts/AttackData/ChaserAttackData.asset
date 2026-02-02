@@ -15,7 +15,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 0}
   ActionLogic: {fileID: 11400000, guid: e13a4a0346bb8f34aa72d5fc892fa6af, type: 2}
   LifeTime: 0
-  Damage: 1
+  Damage: 0
   Speed: 0
   TargetLayers:
     serializedVersion: 2

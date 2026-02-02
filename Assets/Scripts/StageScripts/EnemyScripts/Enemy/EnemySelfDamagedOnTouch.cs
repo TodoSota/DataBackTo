@@ -23,8 +23,7 @@ public class EnemySelfDamagedOnTouch : MonoBehaviour
         {
             if (other.TryGetComponent<PlayerController>(out var player))
             {
-                // <追加>接触でダメージ受けるんだっけ？責任の所在が気になる
-                _controller.ChangeState(_controller.enemyDamagedState);
+                player.TakeDamage(status.TouchDamage, transform.position);
             }
         }
     }
