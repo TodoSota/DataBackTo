@@ -10,6 +10,7 @@ public class EnemyStatus : MonoBehaviour, IKillable
     public float Speed = 2.0f;
     public float CoolTime = 3.0f;
     public AttackData MainAttack;
+    public float TouchDamage;
 
     private EnemyController _controller;
     public event Action DieAction;

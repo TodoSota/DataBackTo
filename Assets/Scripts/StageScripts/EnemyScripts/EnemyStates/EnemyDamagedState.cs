@@ -15,9 +15,11 @@ public class EnemyDamagedState : IEnemyState
     {
         _direction = _enemy.transform.position - _enemy.LastHitPos;
         _enemy.Motor.KnockBack(_direction);
+
+        StartBlinking();
         
         _timer = new Timer();
-        _timer.Start(0.3f);
+        _timer.Start(1.0f);
     }
     public void OnUpdate()
     {
@@ -31,7 +33,30 @@ public class EnemyDamagedState : IEnemyState
     }
     public void OnExit()
     {
+        EndBlinking();
+
         bool isFacing = _direction.x * _enemy.transform.right.x < 0;
         if(!isFacing) _enemy.Motor.FlipX();
+    }
+
+    private void StartBlinking()
+    {
+        var renderer = _enemy.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.EnableKeyword("_EMISSION");
+
+            renderer.material.SetColor("_EmissionColor", Color.white * 5f);
+        }
+    }
+
+    private void EndBlinking()
+    {
+        var renderer = _enemy.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.SetColor("_EmissionColor", Color.black);
+            renderer.material.DisableKeyword("_EMISSION");
+        }
     }
 }

@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     // ノックバック状態
     private bool isKnockBacking = false;
 
+    // ダメージを受けた際の無敵状態・無敵時間
+    public bool isInvincible;
+    public float InvincibleTime = 1.0f;
+
     // 最初のフレームが始まるときに実行
     void Start()
     {
@@ -105,6 +109,8 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = transform.position - AttackerPos;
         KnockBack(direction);
         status.ConsumeHp(amount);
+
+        StartCoroutine(InvincibleCoroutine());
     }
 
     void KnockBack(Vector3 direction)
@@ -126,6 +132,36 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         isKnockBacking = false;
+    }
+
+    IEnumerator InvincibleCoroutine()
+    {
+        isInvincible = true;
+        StartBlinking();
+        yield return new WaitForSeconds(InvincibleTime);
+        isInvincible = false;
+        EndBlinking();
+    }
+
+    private void StartBlinking()
+    {
+        var renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.EnableKeyword("_EMISSION");
+
+            renderer.material.SetColor("_EmissionColor", Color.white * 5f);
+        }
+    }
+
+    private void EndBlinking()
+    {
+        var renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.SetColor("_EmissionColor", Color.black);
+            renderer.material.DisableKeyword("_EMISSION");
+        }
     }
 
     public void Warp(Vector3 position)
