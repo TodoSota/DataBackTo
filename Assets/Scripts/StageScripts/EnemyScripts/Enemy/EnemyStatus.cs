@@ -12,12 +12,8 @@ public class EnemyStatus : MonoBehaviour, IKillable
     public AttackData MainAttack;
     public float TouchDamage;
 
-    private EnemyController _controller;
     public event Action DieAction;
 
-    private void Awake() {
-        _controller = GetComponent<EnemyController>();
-    }
     // ƒ_ƒ[ƒWˆ—
     public void TakeDamage(int damage)
     {
@@ -27,7 +23,6 @@ public class EnemyStatus : MonoBehaviour, IKillable
     public void InstantKill()
     {
         if (hp <= 0) return;
-
         hp = 0;
         DieAction?.Invoke();
     }
