@@ -60,11 +60,6 @@ public class CodeGenerator : MonoBehaviour
         Draw(widths);
     }
 
-    private static int CalcCheckDigit(int sum)
-    {
-        return sum % 103;
-    }
-
     private IEnumerable<int> GetPatternWidths(int index)
     {
         return _widthsTable[index].Select(c => c - '0');

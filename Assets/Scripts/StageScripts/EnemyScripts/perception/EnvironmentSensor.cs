@@ -17,6 +17,7 @@ public class EnvironmentSensor : MonoBehaviour
     // ŠR‚©‚Ç‚¤‚©‚ð”»’è‚·‚é‹@”\
     public bool IsAtLedge()
     {
+        if(!IsGrounded()) return false;
         float distanceToEdge = col.bounds.extents.x;
         Vector3 checkPos = transform.position + (transform.right * (distanceToEdge + ledgeOffset));
 
@@ -55,8 +56,8 @@ public class EnvironmentSensor : MonoBehaviour
         Vector3 checkPos = transform.position + new Vector3(0, -bounds.extents.y, 0);
 
         float width = bounds.extents.x * 0.8f; // X
-        float thickness = 0.05f;              // Y
-        float depth = 0.1f;                  // Z
+        float thickness = 0.05f;               // Y
+        float depth = 0.1f;                    // Z
         
         Vector3 halfExtents = new Vector3(width, thickness, depth); 
 

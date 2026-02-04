@@ -2076,7 +2076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6264319098887713295, guid: a507691d64f4e984b902070fd1c51309, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7620343187051061670, guid: a507691d64f4e984b902070fd1c51309, type: 3}
       propertyPath: Eye.EyeOffsetAngle
@@ -4239,6 +4239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 5
+  isInvincible: 0
+  InvincibleTime: 1
 --- !u!114 &1958061444
 MonoBehaviour:
   m_ObjectHideFlags: 0
