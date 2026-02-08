@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     // 外部からの情報を保持する
     private Rigidbody rb;
+    private Animator anim;
     private PlayerStatus status;
     private float horizontalInput;
 
@@ -28,8 +29,8 @@ public class PlayerController : MonoBehaviour
     // 最初のフレームが始まるときに実行
     void Start()
     {
-        // GameObject についている RigidBody を取得
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();     // GameObject についている RigidBody を取得
+        anim = GetComponentInChildren<Animator>();  // モデルのアニメーターを取得
         status = GetComponent<PlayerStatus>();
         status.dieAction+=OnPlayerDeath;
         SetUp();
@@ -61,6 +62,8 @@ public class PlayerController : MonoBehaviour
         if(rb.isKinematic || isKnockBacking) return;
         // 平面移動
         rb.velocity = new Vector3(horizontalInput * moveSpeed, rb.velocity.y, 0);
+        // アニメーターのパラメータ変更
+        anim.SetFloat("WalkSpeed", Mathf.Abs(horizontalInput * moveSpeed));
     }
 
     void Jump()
@@ -178,6 +181,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             status.isGrounded = true;
+            anim.SetBool("isGround", status.isGrounded);    // アニメーターのパラメータ変更
             status.ResetJumpConut();
             SaveLastSafepoint(transform.position);
         }
@@ -190,6 +194,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             status.isGrounded = false;
+            anim.SetBool("isGround", status.isGrounded);    // アニメーターのパラメータ変更
         }
     }
 
