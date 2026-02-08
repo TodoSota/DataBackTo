@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719e1d6f9a61dc4418133f7268ff75eb, type: 3}
   m_Name: RecederAttackData
   m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 5029801894057164076, guid: 6706798282e7ab041a45f8ac1e3ab51d, type: 3}
+  BulletPrefab: {fileID: 5029801894057164076, guid: b62a53a4538728f499b8005efdfa45ec, type: 3}
   ActionLogic: {fileID: 11400000, guid: 2789ae21d436d4b40b69ce4daec8aabb, type: 2}
   LifeTime: 10
   Damage: 1

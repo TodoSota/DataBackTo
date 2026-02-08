@@ -21,6 +21,7 @@ public class PlayerAction : MonoBehaviour
 
     // UŒ‚—Í : Šeís“®‚ÌÛ‚É“K‹XUŒ‚—Í‚ğ“ü—Í‚·‚é
     private int currentPower;
+    private int TouchDamage;
 
     private Rigidbody rb;
     private PlayerStatus status;
@@ -136,14 +137,26 @@ public class PlayerAction : MonoBehaviour
             if (isHipdropping)
             {
                 UnityEngine.Debug.Log("Hit! HipDrop!");
-                other.GetComponent<EnemyStatus>().TakeDamage(currentPower);
+                other.GetComponent<EnemyController>().TakeDamage(currentPower, transform.position);
             }
             else
             {
                 UnityEngine.Debug.Log("Hit! Attack!");
-                other.GetComponent<EnemyStatus>().TakeDamage(currentPower);
+                other.GetComponent<EnemyController>().TakeDamage(currentPower, transform.position);
             }
+        }
+    }
 
+    // ÚG‚Ì“G‚Ö‚Ìƒ_ƒ[ƒW
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject target = collision.gameObject;
+        if (target.CompareTag("Enemy"))
+        {
+            if(target.TryGetComponent<EnemyController>(out var enemy))
+            {
+                enemy.TakeDamage(TouchDamage, transform.position);
+            }
         }
     }
 

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class AttackAction : ScriptableObject
 {
-    public abstract void Execute(EnemyControllerAbstract owner, AttackData data);
+    public abstract void Execute(EnemyController owner, AttackData data);
 }

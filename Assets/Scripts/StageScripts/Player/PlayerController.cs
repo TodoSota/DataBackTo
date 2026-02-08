@@ -18,6 +18,13 @@ public class PlayerController : MonoBehaviour
     // 復活に利用する安全地点の保存
     public Vector3 lastSafePosition { get; private set; }
 
+    // ノックバック状態
+    private bool isKnockBacking = false;
+
+    // ダメージを受けた際の無敵状態・無敵時間
+    public bool isInvincible;
+    public float InvincibleTime = 1.0f;
+
     // 最初のフレームが始まるときに実行
     void Start()
     {
@@ -51,7 +58,7 @@ public class PlayerController : MonoBehaviour
     // 物理演算用のループ : 一定時間ごとに呼び出し
     void FixedUpdate()
     {
-        if(rb.isKinematic) return;
+        if(rb.isKinematic || isKnockBacking) return;
         // 平面移動
         rb.velocity = new Vector3(horizontalInput * moveSpeed, rb.velocity.y, 0);
     }
@@ -97,9 +104,64 @@ public class PlayerController : MonoBehaviour
         Stop();
     }
 
-    void KnockBack()
+    public void TakeDamage(float amount, Vector3 AttackerPos)
     {
-        
+        Vector3 direction = transform.position - AttackerPos;
+        KnockBack(direction);
+        status.ConsumeHp(amount);
+
+        StartCoroutine(InvincibleCoroutine());
+    }
+
+    void KnockBack(Vector3 direction)
+    { 
+        StopCoroutine(nameof(KnockBackSequence));
+        StartCoroutine(KnockBackSequence(direction));
+    }
+
+    IEnumerator KnockBackSequence(Vector3 direction)
+    {
+        isKnockBacking = true;
+        float kbX = (direction.x == 0f) 
+                ? (transform.right.x >= 0 ? -1f : 1f)
+                : Mathf.Sign(direction.x);
+        float hopY = 0.5f;
+        Vector3 kbDir = new Vector3(kbX, hopY, 0f);
+        rb.AddForce(kbDir * 5f, ForceMode.VelocityChange);
+
+        yield return new WaitForSeconds(0.2f);
+
+        isKnockBacking = false;
+    }
+
+    IEnumerator InvincibleCoroutine()
+    {
+        isInvincible = true;
+        StartBlinking();
+        yield return new WaitForSeconds(InvincibleTime);
+        isInvincible = false;
+        EndBlinking();
+    }
+
+    private void StartBlinking()
+    {
+        var renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.EnableKeyword("_EMISSION");
+
+            renderer.material.SetColor("_EmissionColor", Color.white * 5f);
+        }
+    }
+
+    private void EndBlinking()
+    {
+        var renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material.SetColor("_EmissionColor", Color.black);
+            renderer.material.DisableKeyword("_EMISSION");
+        }
     }
 
     public void Warp(Vector3 position)

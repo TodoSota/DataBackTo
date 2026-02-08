@@ -16,13 +16,15 @@ GameObject:
   - component: {fileID: 1241140373741132212}
   - component: {fileID: 5577441669341149103}
   - component: {fileID: 737933436479316870}
+  - component: {fileID: 2608418414630409859}
+  - component: {fileID: 2234166809640466865}
   m_Layer: 8
   m_Name: Receder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8203437384807531938
 Transform:
   m_ObjectHideFlags: 0
@@ -66,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,9 +151,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1
-  Speed: 3
+  Speed: 2
   CoolTime: 2
   MainAttack: {fileID: 11400000, guid: 837cf3a5e07916a45a49364fa507cd2f, type: 2}
+  TouchDamage: 1
 --- !u!114 &5577441669341149103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,17 +183,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654ae4cf4d2c5e142bed37a0a0e09ef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Status: {fileID: 1241140373741132212}
-  ChaseRate: 4
-  speed: 0
-  _eye:
+--- !u!114 &2608418414630409859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3617014332733891333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 213d0ffeed3e4044fa920577f4a410b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Status: {fileID: 0}
+  ChaseRate: 5
+  Eye:
     ViewRadius: 10
     ViewAngle: 90
-    EyeOffsetAngle: 0
+    EyeOffsetAngle: 45
     TargetMask:
       serializedVersion: 2
       m_Bits: 64
     ObstacleMask:
       serializedVersion: 2
       m_Bits: 128
+  Motor: {fileID: 0}
   <IsFlying>k__BackingField: 0
+--- !u!114 &2234166809640466865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3617014332733891333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 654ae4cf4d2c5e142bed37a0a0e09ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
