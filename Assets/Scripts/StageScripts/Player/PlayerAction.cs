@@ -8,7 +8,7 @@ public class PlayerAction : MonoBehaviour
     // 通常攻撃
     public GameObject attackHitbox;     // attackRenge がオブジェクトとしてある
     public MeshRenderer attackRenderer; // 色を変えるためのレンダラー
-    public float attackDuration = 0.2f; // 光る時間
+    public float attackDuration = 0.5f; // 光る時間
 
     // 強化(射撃)攻撃
     public GameObject coinPrefab;
@@ -25,11 +25,13 @@ public class PlayerAction : MonoBehaviour
 
     private Rigidbody rb;
     private PlayerStatus status;
+    private Animator anim;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         status = GetComponent<PlayerStatus>();
+        anim = GetComponentInChildren<Animator>();  // モデルのアニメーターを取得
         status.dieAction += OnPlayerDeath;
     }
 
@@ -76,9 +78,11 @@ public class PlayerAction : MonoBehaviour
     {
         if (!CanAttack()) yield break;
         attackHitbox.SetActive(true);                   // 攻撃範囲を表示
+        anim.SetBool("isAttacking", true);              // アニメーターのパラメータ変更
         attackRenderer.material.color = Color.yellow;   // 色を黄色に
         yield return new WaitForSeconds(attackDuration);// 攻撃時間分
         attackHitbox.SetActive(false);                  // 攻撃範囲を非表示
+        anim.SetBool("isAttacking", false);             // アニメーターのパラメータ変更
     }
 
     // ヒップドロップのコルーチン
@@ -86,11 +90,18 @@ public class PlayerAction : MonoBehaviour
     {
         if (!CanAttack()) yield break;
         isHipdropping = true;
+        anim.SetBool("isHipdropping", isHipdropping);    // アニメーターのパラメータ変更
+
+        UnityEngine.Debug.Log("Shoooooot!!!");
 
         // 攻撃判定を直下に移動
         attackHitbox.transform.localPosition = new Vector3(0, -1.2f, 0);
         attackHitbox.SetActive(true);
         attackRenderer.material.color = Color.yellow;
+
+        // 攻撃前にちょっと待機
+        rb.velocity = new Vector3(0, 0, 0);
+        yield return new WaitForSeconds(attackDuration);
 
         // 強化行動のヒップドロップ
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && status.money >= 10)
@@ -111,6 +122,7 @@ public class PlayerAction : MonoBehaviour
 
         // 攻撃ダメージはヒットボックスの Trigger にある
         isHipdropping = false;
+        anim.SetBool("isHipdropping", isHipdropping);    // アニメーターのパラメータ変更
         attackHitbox.SetActive(false);
         attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
     }
