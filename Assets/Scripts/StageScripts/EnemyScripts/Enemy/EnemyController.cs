@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
 
     // 他のステートも、プロパティ（全体）が protected なら set も protected でOK
     public virtual IEnemyState enemyPatrolState { get; protected set; }
+    public virtual IEnemyState enemyNotionState {get; protected set; }
     public virtual IEnemyState enemyAttackState { get; protected set; }
     public virtual IEnemyState enemyCoolDownState { get; protected set; }
     public virtual IEnemyState enemyDamagedState { get; protected set; }
@@ -69,6 +70,7 @@ public class EnemyController : MonoBehaviour
     {
         enemyPatrolState = new EnemyPatrolState(this);
         enemyAttackState = new EnemyAttackState(this);
+        enemyNotionState = new EnemyNotoinState(this);
         enemyCoolDownState = new EnemyCoolDownState(this);
         enemyDamagedState = new EnemyDamagedState(this);
         enemyDieState = new EnemyDieState(this);

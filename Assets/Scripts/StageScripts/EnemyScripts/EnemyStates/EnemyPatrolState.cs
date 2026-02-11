@@ -17,7 +17,7 @@ public class EnemyPatrolState : IEnemyState
         if (_enemy.Target is not null)
         {
             Debug.Log("<color=red>enemy</color> : Player‚ğ”­Œ©II");
-            _enemy.ChangeState(_enemy.enemyAttackState);
+            _enemy.ChangeState(_enemy.enemyNotionState);
             return;
         }
         _enemy.Patrol();
