@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerStatus : MonoBehaviour, IKillable
 {
     // 基本ステータス
     public float hp = 100f;
+    private float MAX_HP = 100f;
     public int money = 0;
     public const int MaxMoney = 50;
     public bool isDead = false;
@@ -21,6 +23,7 @@ public class PlayerStatus : MonoBehaviour, IKillable
 
     // アクションイベント
     public event Action dieAction;
+    public UnityEvent<float> OnHPChanged;
 
     private Rigidbody rb;
 
@@ -54,6 +57,8 @@ public class PlayerStatus : MonoBehaviour, IKillable
     {
         hp -= amount;
         hp = Mathf.Max(hp, 0);
+
+        OnHPChanged?.Invoke(hp/MAX_HP);
     }
 
     public void InstantKill()

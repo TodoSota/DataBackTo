@@ -21,7 +21,7 @@ public class PlayerAction : MonoBehaviour
 
     // 攻撃力 : 各種行動の際に適宜攻撃力を入力する
     private int currentPower;
-    private int TouchDamage;
+    private int TouchDamage = 1;
 
     // 他クラスや表示モデルに関するデータ
     private Rigidbody rb;
