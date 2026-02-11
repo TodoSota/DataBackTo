@@ -6,6 +6,7 @@ public class EnemyEye
     // Ž‹—Í
     public float ViewRadius = 10f;
     [Range(0, 360)] public float ViewAngle = 90f;
+    [Range(0, 360)] private float _defaultViewAngle;
 
     [Range(-180, 180)]
     [Tooltip("0‚È‚ç^‰¡A³‚È‚ç‰ºŒü‚«A•‰‚È‚çãŒü‚«‚ÉŽ‹ü‚ªŒX‚«‚Ü‚·")]
@@ -18,7 +19,10 @@ public class EnemyEye
 
     private Transform _owner;
 
-    public void Init(Transform owner) => _owner = owner;
+    public void Init(Transform owner) {
+        _owner = owner;
+        _defaultViewAngle = ViewAngle;
+    }
 
     private Vector3 GazeDirection 
     {
@@ -52,6 +56,16 @@ public class EnemyEye
             }
         }
         return null;
+    }
+
+    public void ResetViewAngle()
+    {
+        ViewAngle = _defaultViewAngle;
+    }
+
+    public void SpreadViewAngle()
+    {
+        ViewAngle = 360;
     }
 
     public void DrawViewGizmos()

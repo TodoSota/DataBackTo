@@ -49,7 +49,6 @@ public class EnemyDamagedState : IEnemyState
             renderer.material.SetColor("_EmissionColor", Color.white * 5f);
         }
     }
-
     private void EndBlinking()
     {
         var renderer = _enemy.GetComponent<Renderer>();

@@ -48,6 +48,7 @@ public abstract class EnemyMotor : MonoBehaviour {
 
     IEnumerator KnockBackSequence(Vector3 direction)
     {
+        rb.velocity = Vector3.zero;
         float kbX = (direction.x == 0f) 
                 ? (transform.right.x >= 0 ? -1f : 1f)
                 : Mathf.Sign(direction.x);
