@@ -8,11 +8,15 @@ public class EnemyNotoinState : IEnemyState
 
     // コンストラクタ
     public EnemyNotoinState(EnemyController enemy) => _enemy = enemy;
+    private Timer _timer;
     public void OnEnter()
     {
+        _timer = new Timer();
     }
     public void OnUpdate()
     {
+        _timer.Update(Time.deltaTime);
+        if(_timer.IsFinished) _enemy.ChangeState(_enemy.enemyAttackState);
     }
 
     public void OnExit()
