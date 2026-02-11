@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class TransitionManager : MonoBehaviour
@@ -33,15 +34,15 @@ public class TransitionManager : MonoBehaviour
         _generator = GetComponent<CodeGenerator>();
     }
 
-    public void StartTransition(string text)
+    public void StartTransition(string text, string SceneName)
     {
         _text.text = text;
         _generator.CreateCodeSlit(text);
 
-        StartCoroutine(TransitionSequence());
+        StartCoroutine(TransitionSequence(SceneName));
     }
 
-    private IEnumerator TransitionSequence()
+    private IEnumerator TransitionSequence(string SceneName)
     {
         _myCanvas.enabled = true;
         StartCoroutine(AnimateCover(_BackGround, _coverDuration));
@@ -49,6 +50,7 @@ public class TransitionManager : MonoBehaviour
         yield return StartCoroutine(AnimateCover(_code, _coverDuration));
 
         yield return new WaitForSeconds(_waitTime);
+        SceneManager.LoadScene(SceneName);
         
         StartCoroutine(AnimateWipe(_BackGround, _wipeDuration));
         yield return new WaitForSeconds(_delayTime);
