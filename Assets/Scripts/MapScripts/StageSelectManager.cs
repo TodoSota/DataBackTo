@@ -97,12 +97,7 @@ namespace MapScene
 
             yield return new WaitForSeconds(0.1f);
             StageNode currentNode = GetNodeByID(_mapData.CurrentStageID);
-            LoadScene(currentNode.StageName);
-        }
-
-        private void LoadScene(string sceneName)
-        {
-            SceneManager.LoadScene(sceneName);
+            TransitionManager.Instance.StartTransition(_mapData.CurrentStageID, currentNode.StageName);
         }
     }
 }
