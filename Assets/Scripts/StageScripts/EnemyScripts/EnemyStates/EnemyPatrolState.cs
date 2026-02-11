@@ -10,6 +10,7 @@ public class EnemyPatrolState : IEnemyState
     public EnemyPatrolState(EnemyController enemy) => _enemy = enemy;
     public void OnEnter()
     {
+        _enemy.Eye.ResetViewAngle();
     }
     public void OnUpdate()
     {

@@ -10,7 +10,7 @@ public class EnemyAttackState : IEnemyState
     public EnemyAttackState(EnemyController enemy) => _enemy = enemy;
     public void OnEnter()
     {
-        
+        _enemy.Eye.SpreadViewAngle();
     }
     public void OnUpdate()
     {
@@ -28,6 +28,5 @@ public class EnemyAttackState : IEnemyState
     }
     public void OnExit()
     {
-        
     }
 }
