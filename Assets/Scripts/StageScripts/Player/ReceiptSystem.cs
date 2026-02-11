@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,9 +30,16 @@ public class ReceiptSystem : MonoBehaviour
     private float holdTimer = 0f;
     private bool isSaveProcessed = false;
 
+    [SerializeField] private GameObject addModel1;
+    [SerializeField] private GameObject addModel2;
+    [SerializeField] private GameObject addModel3;
+
     void Start()
     {
         status = GetComponent<PlayerStatus>();
+        addModel1.SetActive(false);
+        addModel2.SetActive(false);
+        addModel3.SetActive(false);
     }
 
     void Update()
@@ -67,6 +75,22 @@ public class ReceiptSystem : MonoBehaviour
         if (receiptStack.Count >= maxReceiptLimit) return;  // è„å¿Ç»ÇÁèIóπ
         ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount);
         receiptStack.Add(newData);
+        
+        // í«â¡Ç≈ï\é¶Ç∑ÇÈÉÇÉfÉã
+        switch (receiptStack.Count)
+        {
+            case 1:
+                addModel1.SetActive(true);
+                break;
+            case 2:
+                addModel2.SetActive(true);
+                break;
+            case 3:
+                addModel3.SetActive(true);
+                break;
+            default:
+                break;
+        }
 
         UnityEngine.Debug.Log("Receipt Done!! : " + receiptStack.Count);
     }
