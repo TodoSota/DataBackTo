@@ -19,7 +19,7 @@ public class EnemyDamagedState : IEnemyState
         StartBlinking();
         
         _timer = new Timer();
-        _timer.Start(1.0f);
+        _timer.Start(0.5f);
     }
     public void OnUpdate()
     {

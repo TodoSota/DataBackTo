@@ -23,6 +23,7 @@ public class PlayerAction : MonoBehaviour
     private int currentPower;
     private int TouchDamage;
 
+    // 他クラスや表示モデルに関するデータ
     private Rigidbody rb;
     private PlayerStatus status;
     private Animator anim;

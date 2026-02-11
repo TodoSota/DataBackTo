@@ -20,26 +20,21 @@ public struct ReceiptData
 public class ReceiptSystem : MonoBehaviour
 {
     // 設定
-    public float requireHoldTime = 1.5f;// セーブ発火に必要な時間
+    public float requireHoldTime = 0.5f;// セーブ発火に必要な時間
     public int maxReceiptLimit = 3;     // 最大保持数
 
-    // 現在の保持数
+    // レシート保存の格納場所
     public List<ReceiptData> receiptStack = new List<ReceiptData>();
 
     private PlayerStatus status;
+    private PlayerLookController lookController;
     private float holdTimer = 0f;
     private bool isSaveProcessed = false;
-
-    [SerializeField] private GameObject addModel1;
-    [SerializeField] private GameObject addModel2;
-    [SerializeField] private GameObject addModel3;
 
     void Start()
     {
         status = GetComponent<PlayerStatus>();
-        addModel1.SetActive(false);
-        addModel2.SetActive(false);
-        addModel3.SetActive(false);
+        lookController = GetComponent<PlayerLookController>();
     }
 
     void Update()
@@ -73,24 +68,13 @@ public class ReceiptSystem : MonoBehaviour
     void SaveState()
     {
         if (receiptStack.Count >= maxReceiptLimit) return;  // 上限なら終了
+
+        // 記録したデータを格納
         ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount);
         receiptStack.Add(newData);
-        
-        // 追加で表示するモデル
-        switch (receiptStack.Count)
-        {
-            case 1:
-                addModel1.SetActive(true);
-                break;
-            case 2:
-                addModel2.SetActive(true);
-                break;
-            case 3:
-                addModel3.SetActive(true);
-                break;
-            default:
-                break;
-        }
+
+        // モデルの見た目を変更
+        lookController.ReceiptReload(receiptStack.Count);
 
         UnityEngine.Debug.Log("Receipt Done!! : " + receiptStack.Count);
     }
@@ -110,6 +94,8 @@ public class ReceiptSystem : MonoBehaviour
 
         // 使用済みのものは破棄
         receiptStack.RemoveAt(lastIndex);
+        // モデルの見た目を変更
+        lookController.ReceiptReload(receiptStack.Count);   
 
         UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
         status.DisplayState();

@@ -20,7 +20,7 @@ public class CoinBullet : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            other.GetComponent<EnemyStatus>()?.TakeDamage(1);
+            other.GetComponent<EnemyController>()?.TakeDamage(1, transform.position);
             Destroy(gameObject); // ìñÇΩÇÍÇŒè¡ñ≈
         }
     }
