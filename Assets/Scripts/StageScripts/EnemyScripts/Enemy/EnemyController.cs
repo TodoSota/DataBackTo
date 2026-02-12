@@ -89,7 +89,7 @@ public class EnemyController : MonoBehaviour
         _currentState.OnEnter();
     }
 
-    public virtual void Attack()=>Status.MainAttack?.ActionLogic.Execute(this, Status.MainAttack);
+    public virtual void Attack() => Status.MainAttack?.ActionLogic.Execute(this, Status.MainAttack);
     public virtual void Patrol() => Motor.Patrol();
     public virtual void Move(Vector3 dir, float speed) => Motor.Move(dir, speed);
     public virtual void Stop() => Motor.Stop();
