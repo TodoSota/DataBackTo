@@ -11,6 +11,7 @@ public class EnemyNotoinState : IEnemyState
     private Timer _timer = new Timer();
     public void OnEnter()
     {
+        _enemy.Stop();
         _timer.Start(1.0f);
 
         PlayNotion();
@@ -29,6 +30,8 @@ public class EnemyNotoinState : IEnemyState
 
     private void PlayNotion()
     {
+        SoundManager.Instance.PlaySE("Notion");
+
         Vector3 ownPos = _enemy.transform.position;
         Collider col = _enemy.GetComponent<Collider>();
         float offset = 1.0f;

@@ -92,6 +92,7 @@ public class EnemyController : MonoBehaviour
     public virtual void Attack()=>Status.MainAttack?.ActionLogic.Execute(this, Status.MainAttack);
     public virtual void Patrol() => Motor.Patrol();
     public virtual void Move(Vector3 dir, float speed) => Motor.Move(dir, speed);
+    public virtual void Stop() => Motor.Stop();
 
     public void TransitionToDie() => ChangeState(enemyDieState);
 
