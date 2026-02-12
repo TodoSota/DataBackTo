@@ -2151,7 +2151,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 63.754032
+  field of view: 80.35
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2177,8 +2177,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.00000017484555, w: 1}
-  m_LocalPosition: {x: -1.1517712, y: -2.423293, z: -9.761631}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.1517712, y: -2.423293, z: -6.161631}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2316,7 +2316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6264319098887713295, guid: a507691d64f4e984b902070fd1c51309, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7620343187051061670, guid: a507691d64f4e984b902070fd1c51309, type: 3}
       propertyPath: Eye.EyeOffsetAngle
@@ -2507,7 +2507,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 1958061442}
   m_Lens:
-    FieldOfView: 63.754032
+    FieldOfView: 80.35
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -2534,7 +2534,7 @@ Transform:
   m_GameObject: {fileID: 1140695801}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1517712, y: -2.423293, z: -9.761631}
+  m_LocalPosition: {x: -1.1517712, y: -2.423293, z: -6.161631}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2945,7 +2945,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 10
+  m_CameraDistance: 6.4
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
