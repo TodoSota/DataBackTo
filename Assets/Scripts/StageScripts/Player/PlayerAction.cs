@@ -65,10 +65,16 @@ public class PlayerAction : MonoBehaviour
                     StartCoroutine(PerformAttack());
                 }
             }
-            // 空中ならばヒップドロップ
+            // 空中攻撃
             else
             {
-                StartCoroutine(PerformHipdrop());
+                // 下入力があればヒップドロップ
+                if(Input.GetKey(KeyCode.DownArrow)) StartCoroutine(PerformHipdrop());
+                else
+                {
+                    currentPower = 1;
+                    StartCoroutine(PerformAttack());
+                }
             }
                 
         }
