@@ -12,10 +12,16 @@ public class PlayerLookController : MonoBehaviour
     [SerializeField] private GameObject addModel3;
     [SerializeField] private Transform targetBone;  // レシートを接続する一番親のボーン
     private Vector3 originEuler;                    // 親ボーンの初期角度
+    private GameObject[] ReceiptModels;             // レシートをまとめたもの
 
-    private GameObject[] ReceiptModels;
+    [SerializeField] private Material FaceMaterial; // 顔のマテリアル
+    [SerializeField] private Material DispMaterial; // もう一つのディスプレイのマテリアル
+    private bool LightisBoosted = false;
+    private bool LightisPowered = false;
+    private bool frag = false;
 
     private Rigidbody rb;
+    private float horizontalInput;
 
     void Start()
     {
@@ -31,11 +37,63 @@ public class PlayerLookController : MonoBehaviour
         ReceiptModels[0].SetActive(false);
     }
 
-    void LateUpdate()
+    void Update()
     {
-        ReceiptFlut();
+        OperateLight(); // Display に関するプレイヤーからの操作
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if(frag)
+            {
+                FaceMaterial.SetVector("_ExpressionOffset", new Vector2(0.5f, 0f));
+            }else
+            {
+                FaceMaterial.SetVector("_ExpressionOffset", new Vector2(0.5f, 0.5f));
+            }
+        }
+        frag = !frag;
     }
 
+    void LateUpdate()
+    {
+        ReceiptFlut();  // 移動によるレシートのたなびき
+    }
+
+    // ディスプレイのライトに関する操作
+    private void OperateLight()
+    {
+        // 上矢印キーでライトの強弱を変更
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (LightisBoosted)
+            {
+                DispMaterial.SetFloat("_EmissionIntensity", 10f);   // 値を強める
+                FaceMaterial.SetFloat("_EmissionIntensity", 10f);   // 値を強める
+            }
+            else
+            {
+                DispMaterial.SetFloat("_EmissionIntensity", 1000f); // 値を弱める
+                FaceMaterial.SetFloat("_EmissionIntensity", 100f); // 値を弱める
+            }
+            LightisBoosted = !LightisBoosted;
+        }
+
+        // 下矢印キーでライトのon/offを変更
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (LightisPowered)
+            {
+                DispMaterial.SetVector("_ExpressionOffset", new Vector2(0f, 0f));
+            }
+            else
+            {
+                DispMaterial.SetVector("_ExpressionOffset", new Vector2(0.5f, 0f));
+            }
+            LightisPowered = !LightisPowered;
+        }
+    }
+
+    // 移動によるレシートのたなびき
     private void ReceiptFlut()
     {
         // 物体の移動速度に応じてレシートを傾ける
@@ -53,6 +111,7 @@ public class PlayerLookController : MonoBehaviour
                     originEuler.z);
     }
 
+    // レシートの増減の際の描画更新
     public void ReceiptReload(int viewnum)
     {
         // 一度全部非表示にする

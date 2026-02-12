@@ -12,7 +12,10 @@ public class EnemyNotoinState : IEnemyState
     public void OnEnter()
     {
         _timer.Start(1.0f);
+
+        PlayNotion();
     }
+
     public void OnUpdate()
     {
         _timer.Update(Time.deltaTime);
@@ -22,5 +25,14 @@ public class EnemyNotoinState : IEnemyState
     public void OnExit()
     {
         
+    }
+
+    private void PlayNotion()
+    {
+        Vector3 ownPos = _enemy.transform.position;
+        Collider col = _enemy.GetComponent<Collider>();
+        float offset = 1.0f;
+        Vector3 headPos = new Vector3(ownPos.x, col.bounds.max.y + offset, ownPos.z);
+        SpriteEffectManager.Instance.PlayNotion(headPos);
     }
 }

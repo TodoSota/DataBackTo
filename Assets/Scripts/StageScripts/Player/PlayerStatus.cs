@@ -61,6 +61,12 @@ public class PlayerStatus : MonoBehaviour, IKillable
         OnHPChanged?.Invoke(hp/MAX_HP);
     }
 
+    public void OverwriteHp(float value)
+    {
+        hp = value;
+        OnHPChanged?.Invoke(hp/MAX_HP);
+    }
+
     public void InstantKill()
     {
         if (hp <= 0) return;
