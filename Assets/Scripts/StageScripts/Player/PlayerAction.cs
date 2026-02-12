@@ -175,10 +175,12 @@ public class PlayerAction : MonoBehaviour
 
     private void OnPlayerDeath()
     {
+        Debug.Log("éÄÇÒÇæÇ∫ÅIÅI");
         StopAllCoroutines();
         attackHitbox.SetActive(false);
         attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
         isHipdropping = false;
+        anim.SetBool("isHipdropping", isHipdropping);
     }
 
     private void OnRespawn()
