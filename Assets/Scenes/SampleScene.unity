@@ -4458,6 +4458,8 @@ MonoBehaviour:
   addModel2: {fileID: 11868399}
   addModel3: {fileID: 827537130}
   targetBone: {fileID: 1035970644}
+  FaceMaterial: {fileID: 2100000, guid: ce7f7cee5bb633a43a02b9fb53eb80f7, type: 2}
+  DispMaterial: {fileID: 2100000, guid: 0c666bdf2d9f6f14187a6242a1a2d3e6, type: 2}
 --- !u!114 &1958061448
 MonoBehaviour:
   m_ObjectHideFlags: 0
