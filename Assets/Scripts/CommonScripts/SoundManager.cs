@@ -32,10 +32,7 @@ public class SoundManager : MonoBehaviour
     {
         foreach(var d in data.soundDataList)
         {
-            if (!dict.ContainsKey(d.key))
-            {
-                dict.Add(d.key, d);
-            }
+            if (!dict.ContainsKey(d.key)) dict.Add(d.key, d);
         }
     }
 
