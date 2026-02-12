@@ -14,6 +14,7 @@ public class EnvironmentSensor : MonoBehaviour
     {
         col = GetComponent<Collider>();
     }
+    
     // ŠR‚©‚Ç‚¤‚©‚ð”»’è‚·‚é‹@”\
     public bool IsAtLedge()
     {

@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Animator anim;
     private PlayerStatus status;
+    private EnvironmentSensor sensor;
     private float horizontalInput;
 
     // 復活に利用する安全地点の保存
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();     // GameObject についている RigidBody を取得
         anim = GetComponentInChildren<Animator>();  // モデルのアニメーターを取得
         status = GetComponent<PlayerStatus>();
+        sensor = GetComponent<EnvironmentSensor>(); // 接地情報などのセンサーを取得
         status.dieAction+=OnPlayerDeath;
         SetUp();
     }
@@ -60,6 +62,10 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if(rb.isKinematic || isKnockBacking) return;
+
+        // 接地処理
+        CheckGroundStatus();
+
         // 平面移動
         rb.velocity = new Vector3(horizontalInput * moveSpeed, rb.velocity.y, 0);
         // アニメーターのパラメータ変更
@@ -174,27 +180,20 @@ public class PlayerController : MonoBehaviour
         rb.position = position;
     }
 
-    // 何かに接触したら
-    private void OnCollisionStay(Collision collision)
+    private void CheckGroundStatus()
     {
-        // 接触しているオブジェクトの名前が Ground ならば
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            status.isGrounded = true;
-            anim.SetBool("isGround", status.isGrounded);    // アニメーターのパラメータ変更
-            status.ResetJumpConut();
-            SaveLastSafepoint(transform.position);
-        }
-    }
+        bool isGroundedNow = sensor.IsGrounded();
 
-    // 接触が離れたら
-    private void OnCollisionExit(Collision collision)
-    {
-        // 接触しているオブジェクトの名前が Ground ならば
-        if (collision.gameObject.CompareTag("Ground"))
+        if (isGroundedNow != status.isGrounded)
         {
-            status.isGrounded = false;
-            anim.SetBool("isGround", status.isGrounded);    // アニメーターのパラメータ変更
+            status.isGrounded = isGroundedNow;
+            anim.SetBool("isGround", status.isGrounded);
+
+            if (isGroundedNow)
+            {
+                status.ResetJumpConut();
+                SaveLastSafepoint(transform.position);
+            }
         }
     }
 
