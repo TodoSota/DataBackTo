@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 4248498649161330844}
   - component: {fileID: 2816961474786193582}
   - component: {fileID: 5038890629904063589}
-  - component: {fileID: 3507056509119927787}
   - component: {fileID: 8176159268442664246}
   - component: {fileID: 8811257100692222664}
   - component: {fileID: 7688533418863332181}
   - component: {fileID: 8029860404388988905}
   - component: {fileID: 1447646812771678703}
   - component: {fileID: 7620343187051061670}
+  - component: {fileID: 4384352984845901700}
   m_Layer: 8
   m_Name: Chaser
   m_TagString: Enemy
@@ -90,29 +90,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3507056509119927787
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6264319098887713295}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8176159268442664246
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -223,3 +200,24 @@ MonoBehaviour:
       m_Bits: 128
   Motor: {fileID: 7688533418863332181}
   <IsFlying>k__BackingField: 0
+--- !u!65 &4384352984845901700
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6264319098887713295}
+  m_Material: {fileID: 13400000, guid: 627b19e5bf14cda40810514ae16e5cbe, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
