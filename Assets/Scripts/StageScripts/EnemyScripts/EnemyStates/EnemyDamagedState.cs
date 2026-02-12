@@ -28,7 +28,7 @@ public class EnemyDamagedState : IEnemyState
         if (!_timer.IsFinished) return;
 
         // ‰‰o‚ªI‚í‚Á‚Ä‚©‚ç
-        if(_enemy.Status.hp > 0) _enemy.ChangeState(_enemy.enemyPatrolState);
+        if(_enemy.Status.hp > 0) _enemy.ChangeState(_enemy.enemyAttackState);
         else _enemy.ChangeState(_enemy.enemyDieState);
     }
     public void OnExit()

@@ -88,7 +88,7 @@ public class ReceiptSystem : MonoBehaviour
         ReceiptData data = receiptStack[lastIndex];
 
         // PlayerStatus ‚É’l‚ğ‘‚«–ß‚·
-        status.hp = data.savedHp;
+        status.OverwriteHp(data.savedHp);
         status.money = data.savedMoney;
         status.currentJumpCount = data.savedJumpCount;
 
