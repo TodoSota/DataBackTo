@@ -24,6 +24,7 @@ public class PlayerStatus : MonoBehaviour, IKillable
     // アクションイベント
     public event Action dieAction;
     public UnityEvent<float> OnHPChanged;
+    public UnityEvent<int> OnMoneyChanged;
 
     private Rigidbody rb;
 
@@ -79,6 +80,14 @@ public class PlayerStatus : MonoBehaviour, IKillable
         money += amount;
         UnityEngine.Debug.Log("Change Money" + amount);
         money = Mathf.Min(money, MaxMoney);
+
+        OnMoneyChanged?.Invoke(money);
+    }
+
+    public void OverWriteMoney(int amount)
+    {
+        money = amount;
+        OnMoneyChanged?.Invoke(money);
     }
 
     void Die()
