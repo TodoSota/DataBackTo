@@ -188,12 +188,12 @@ public class PlayerController : MonoBehaviour
         {
             status.isGrounded = isGroundedNow;
             anim.SetBool("isGround", status.isGrounded);
+        }
 
-            if (isGroundedNow)
-            {
-                status.ResetJumpConut();
-                SaveLastSafepoint(transform.position);
-            }
+        if (isGroundedNow)
+        {
+            status.ResetJumpConut();
+            SaveLastSafepoint(transform.position);
         }
     }
 
