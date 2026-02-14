@@ -93,8 +93,8 @@ public class ReceiptSystem : MonoBehaviour
         if (receiptStack.Count <= 0) return false;    // 所持がなければ実行不可
 
         // 最新のデータを取り出す
-        int lastIndex = receiptStack.Count - 1;
-        ReceiptData data = receiptStack[lastIndex];
+        int firstIndex = 0;
+        ReceiptData data = receiptStack[firstIndex];
 
         // PlayerStatus に値を書き戻す
         status.OverwriteHp(data.savedHp);
@@ -102,7 +102,7 @@ public class ReceiptSystem : MonoBehaviour
         status.currentJumpCount = data.savedJumpCount;
 
         // 使用済みのものは破棄
-        receiptStack.RemoveAt(lastIndex);
+        receiptStack.RemoveAt(firstIndex);
         // モデルの見た目を変更
         lookController.ReceiptReload(receiptStack.Count);
 
