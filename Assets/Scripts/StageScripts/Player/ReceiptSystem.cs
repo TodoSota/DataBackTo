@@ -2,18 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public struct ReceiptData
 {
     public float savedHp;
     public int savedMoney;
     public int savedJumpCount;
+    public PlayerCondition savedCondition;
 
-    public ReceiptData(float hp, int money, int jumpConut)
+    public ReceiptData(float hp, int money, int jumpConut, PlayerCondition condition)
     {
         savedHp = hp;
         savedMoney = money;
         savedJumpCount = jumpConut;
+        savedCondition = condition;
     }
 }
 
@@ -30,6 +33,9 @@ public class ReceiptSystem : MonoBehaviour
     private PlayerLookController lookController;
     private float holdTimer = 0f;
     private bool isSaveProcessed = false;
+
+    // レシートのイベント
+    public  UnityEvent<List<ReceiptData>> OnReceiptUpdate;
 
     void Start()
     {
@@ -70,11 +76,14 @@ public class ReceiptSystem : MonoBehaviour
         if (receiptStack.Count >= maxReceiptLimit) return;  // 上限なら終了
 
         // 記録したデータを格納
-        ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount);
+        ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount, status.Condition);
         receiptStack.Add(newData);
 
         // モデルの見た目を変更
         lookController.ReceiptReload(receiptStack.Count);
+
+        // レシート上書きでのイベント発火（レシートUIの動機など）
+        OnReceiptUpdate?.Invoke(receiptStack);
 
         UnityEngine.Debug.Log("Receipt Done!! : " + receiptStack.Count);
     }
@@ -95,7 +104,10 @@ public class ReceiptSystem : MonoBehaviour
         // 使用済みのものは破棄
         receiptStack.RemoveAt(lastIndex);
         // モデルの見た目を変更
-        lookController.ReceiptReload(receiptStack.Count);   
+        lookController.ReceiptReload(receiptStack.Count);
+
+        // レシート上書きでのイベント発火（レシートUIの動機など）
+        OnReceiptUpdate?.Invoke(receiptStack);   
 
         UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
         status.DisplayState();

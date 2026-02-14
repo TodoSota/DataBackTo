@@ -13,6 +13,10 @@ public class PlayerStatus : MonoBehaviour, IKillable
     public const int MaxMoney = 50;
     public bool isDead = false;
 
+    // ó‘ÔˆÙí
+
+    public PlayerCondition Condition = PlayerCondition.Normal;
+
     // ©“®Œ¸­’l
     public float hpLossPerSecond = 0.5f;
 
