@@ -1735,7 +1735,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7824051687798472111, guid: e0dd3f048a7458a43b24e854c8870705, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7824051687798472111, guid: e0dd3f048a7458a43b24e854c8870705, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2033,7 +2033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7824051687798472111, guid: e0dd3f048a7458a43b24e854c8870705, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7824051687798472111, guid: e0dd3f048a7458a43b24e854c8870705, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2622,8 +2622,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 20, y: 20}
-  m_SizeDelta: {x: 500, y: 200}
+  m_AnchoredPosition: {x: 20, y: -80}
+  m_SizeDelta: {x: 500, y: 300}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &1026126550
 CanvasRenderer:
@@ -4779,7 +4779,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7824051687798472111, guid: e0dd3f048a7458a43b24e854c8870705, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7824051687798472111, guid: e0dd3f048a7458a43b24e854c8870705, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5110,8 +5110,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f551f9a5653a2f549a665966f268f8c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 5
+  defaultMoveSpeed: 5
+  ShortSpeedRate: 0.8
+  BurnSpeedRate: 1.5
+  defaultJumpForce: 5
+  ShortJumpRate: 0.8
+  BurnJumpRate: 1.5
   isInvincible: 0
   InvincibleTime: 1
 --- !u!114 &1958061444
@@ -5129,7 +5133,9 @@ MonoBehaviour:
   hp: 100
   money: 0
   isDead: 0
-  Condition: 0
+  CurrentCondition: 0
+  shortDamageMult: 1.5
+  burnDecayMult: 1.5
   hpLossPerSecond: 0.5
   currentJumpCount: 0
   maxJumpLimit: 1
@@ -5164,6 +5170,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnConditionChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1958061445
 MonoBehaviour:
   m_ObjectHideFlags: 0

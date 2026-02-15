@@ -7,8 +7,23 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // public変数なら インスペクターから調整可能
-    public float moveSpeed = 5.0f;
-    public float jumpForce = 5.0f;
+    // スピード関連
+    [SerializeField] private float defaultMoveSpeed = 5.0f;
+    [SerializeField] private float ShortSpeedRate = 0.8f;
+    [SerializeField] private float BurnSpeedRate = 1.5f;
+    // スピードのプロパティ
+    private float moveSpeed => (status.CurrentCondition == PlayerCondition.Short)? defaultMoveSpeed * ShortSpeedRate :
+                               (status.CurrentCondition == PlayerCondition.Burn)? defaultMoveSpeed * BurnSpeedRate :
+                                defaultMoveSpeed;
+    
+    // ジャンプ関連
+    [SerializeField] private float defaultJumpForce = 5.0f;
+    [SerializeField] private float ShortJumpRate = 0.8f;
+    [SerializeField] private float BurnJumpRate = 1.5f;
+    // ジャンプ力のプロパティ
+    public float jumpForce => (status.CurrentCondition == PlayerCondition.Short)? defaultJumpForce * ShortJumpRate :
+                               (status.CurrentCondition == PlayerCondition.Burn)? defaultJumpForce * BurnJumpRate :
+                                defaultJumpForce;
 
     // 外部からの情報を保持する
     private Rigidbody rb;
@@ -113,11 +128,11 @@ public class PlayerController : MonoBehaviour
         Stop();
     }
 
-    public void TakeDamage(float amount, Vector3 AttackerPos)
+    public void TakeDamage(float amount, Vector3 AttackerPos, PlayerCondition condition = PlayerCondition.Normal)
     {
         Vector3 direction = transform.position - AttackerPos;
         KnockBack(direction);
-        status.ConsumeHp(amount);
+        status.TakeDamage(amount, condition);
 
         StartCoroutine(InvincibleCoroutine());
     }

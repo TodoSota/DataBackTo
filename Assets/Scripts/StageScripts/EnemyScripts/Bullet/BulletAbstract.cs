@@ -19,7 +19,7 @@ public abstract class BulletAbstract : MonoBehaviour
         {
             if (other.TryGetComponent<PlayerController>(out var player))
             {
-                player.TakeDamage(Data.Damage, transform.position);
+                player.TakeDamage(Data.Damage, transform.position, Data.Condition);
                 //　<追加>ダメージ処理
                 Debug.Log("<color=blue>Player</color>にダメージ!!");
             }
