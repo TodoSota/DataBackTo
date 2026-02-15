@@ -98,7 +98,7 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(int amount, Vector3 AttackerPos)
     {
-        Debug.Log("いてえ");
+        Debug.Log($"{gameObject.name} は {amount} ダメージを受けた！");
         if(_currentState == enemyDamagedState) return;
         
         LastHitPos = AttackerPos;

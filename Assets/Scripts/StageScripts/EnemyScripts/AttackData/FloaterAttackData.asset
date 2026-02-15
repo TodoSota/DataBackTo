@@ -17,6 +17,7 @@ MonoBehaviour:
   LifeTime: 5
   Damage: 1
   Speed: 3
+  Condition: 0
   TargetLayers:
     serializedVersion: 2
     m_Bits: 192

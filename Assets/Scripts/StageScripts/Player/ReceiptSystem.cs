@@ -76,7 +76,7 @@ public class ReceiptSystem : MonoBehaviour
         if (receiptStack.Count >= maxReceiptLimit) return;  // 上限なら終了
 
         // 記録したデータを格納
-        ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount, status.Condition);
+        ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount, status.CurrentCondition);
         receiptStack.Add(newData);
 
         // モデルの見た目を変更

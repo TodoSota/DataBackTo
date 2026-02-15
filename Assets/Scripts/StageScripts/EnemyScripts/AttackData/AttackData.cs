@@ -10,6 +10,7 @@ public class AttackData : ScriptableObject
     public float LifeTime;
     public float Damage;
     public float Speed;
+    public PlayerCondition Condition;
 
     public LayerMask TargetLayers;
 }

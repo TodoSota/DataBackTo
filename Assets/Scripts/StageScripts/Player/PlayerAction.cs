@@ -14,14 +14,28 @@ public class PlayerAction : MonoBehaviour
     public GameObject coinPrefab;
     public Transform firePoint;
 
+    
     // ヒップドロップ
     public float hipdropForce = 20f;    // 落下速度
     public float hipdropDamage = 20f;   // 反動ダメージ
+    private float ShortHipdropScale = 4.0f; // ヒップドロップ時の判定
     private bool isHipdropping = false;
 
+    // 攻撃の種類
+    public enum AttackType { Normal, HipDrop, SuperHipDrop }
+    private AttackType currentAttackType;
+
     // 攻撃力 : 各種行動の際に適宜攻撃力を入力する
-    private int currentPower;
-    private int TouchDamage = 1;
+    [SerializeField] private int basePower = 1;
+    private float GetAttackTypeMultiplier(AttackType type) => type switch
+    {
+        AttackType.Normal       => 1.0f,
+        AttackType.HipDrop      => 10.0f,
+        AttackType.SuperHipDrop => 50.0f,
+        _                       => 1.0f
+    };
+    private float ConditionMultiplier => (status.CurrentCondition == PlayerCondition.Burn) ? 2.0f : 1.0f;
+    private int TouchDamage => (status.CurrentCondition == PlayerCondition.Burn)? 1:5;
 
     // 他クラスや表示モデルに関するデータ
     private Rigidbody rb;
@@ -47,7 +61,7 @@ public class PlayerAction : MonoBehaviour
             if (status.isGrounded)
             {
                 // 攻撃力を 1 に設定
-                currentPower = 1;
+                currentAttackType = AttackType.Normal;
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
                     // 強化(射撃)攻撃
@@ -72,12 +86,17 @@ public class PlayerAction : MonoBehaviour
                 if(Input.GetKey(KeyCode.DownArrow)) StartCoroutine(PerformHipdrop());
                 else
                 {
-                    currentPower = 1;
+                    currentAttackType = AttackType.Normal;
                     StartCoroutine(PerformAttack());
                 }
             }
                 
         }
+    }
+
+    private int GetFinalDamage(AttackType type) 
+    {
+        return Mathf.RoundToInt(basePower * GetAttackTypeMultiplier(type) * ConditionMultiplier);
     }
 
     // 通常攻撃のコルーチン
@@ -104,6 +123,13 @@ public class PlayerAction : MonoBehaviour
         // 攻撃判定を直下に移動
         attackHitbox.transform.localPosition = new Vector3(0, -1.2f, 0);
         attackHitbox.SetActive(true);
+
+        Vector3 defaultHitboxScale = attackHitbox.transform.localScale;
+        if(status.CurrentCondition == PlayerCondition.Short){
+            Vector3 currentScale = defaultHitboxScale;
+            currentScale.x *= ShortHipdropScale;
+            attackHitbox.transform.localScale = currentScale;
+        }
         attackRenderer.material.color = Color.yellow;
 
         // 攻撃前にちょっと待機
@@ -113,7 +139,7 @@ public class PlayerAction : MonoBehaviour
         // 強化行動のヒップドロップ
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && status.money >= 10)
         {
-            currentPower = 50;
+            currentAttackType = AttackType.SuperHipDrop;
             attackRenderer.material.color = Color.magenta;
             status.AddMoney(-10);
             rb.velocity = new Vector3(0, -hipdropForce * 2, 0);// 落下速度
@@ -121,7 +147,7 @@ public class PlayerAction : MonoBehaviour
         }
         else // 通常時のヒップドロップ
         {
-            currentPower = 10;
+            currentAttackType = AttackType.HipDrop;
             rb.velocity = new Vector3(0, -hipdropForce, 0);// 落下速度
             yield return new WaitUntil(() => status.isGrounded);// 着地待機
             status.ConsumeHp(hipdropDamage);                // 着地自傷ダメージ
@@ -131,6 +157,7 @@ public class PlayerAction : MonoBehaviour
         isHipdropping = false;
         anim.SetBool("isHipdropping", isHipdropping);    // アニメーターのパラメータ変更
         attackHitbox.SetActive(false);
+        attackHitbox.transform.localScale = defaultHitboxScale;
         attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
     }
 
@@ -153,16 +180,12 @@ public class PlayerAction : MonoBehaviour
     {
         if (attackHitbox.activeSelf && other.CompareTag("Enemy"))
         {
-            if (isHipdropping)
-            {
-                UnityEngine.Debug.Log("Hit! HipDrop!");
-                other.GetComponent<EnemyController>().TakeDamage(currentPower, transform.position);
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Hit! Attack!");
-                other.GetComponent<EnemyController>().TakeDamage(currentPower, transform.position);
-            }
+            if (isHipdropping) UnityEngine.Debug.Log("Hit! HipDrop!");
+            else UnityEngine.Debug.Log("Hit! Attack!");
+
+            UnityEngine.Debug.Log("Hit! HipDrop!");UnityEngine.Debug.Log("Hit! Attack!");
+            int damage = GetFinalDamage(currentAttackType);
+            other.GetComponent<EnemyController>().TakeDamage(damage, transform.position);
         }
     }
 
@@ -187,10 +210,5 @@ public class PlayerAction : MonoBehaviour
         attackHitbox.transform.localPosition = new Vector3(1, 0, 0);
         isHipdropping = false;
         anim.SetBool("isHipdropping", isHipdropping);
-    }
-
-    private void OnRespawn()
-    {
-        
     }
 }
