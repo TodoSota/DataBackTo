@@ -56,7 +56,8 @@ public class PlayerController : MonoBehaviour
     // 毎フレーム
     void Update()
     {
-        
+        if(status.hp < 1) return;
+
         horizontalInput = Input.GetAxisRaw("Horizontal");// 左右方向にキー入力を監視
         if(horizontalInput > 0 )
         {
