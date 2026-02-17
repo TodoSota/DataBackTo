@@ -164,6 +164,7 @@ public class PlayerController : MonoBehaviour
         isInvincible = true;
         StartBlinking();
         yield return new WaitForSeconds(InvincibleTime);
+
         isInvincible = false;
         EndBlinking();
     }
@@ -174,7 +175,6 @@ public class PlayerController : MonoBehaviour
         if (renderer != null)
         {
             renderer.material.EnableKeyword("_EMISSION");
-
             renderer.material.SetColor("_EmissionColor", Color.white * 5f);
         }
     }
