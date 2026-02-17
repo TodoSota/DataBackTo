@@ -32,10 +32,10 @@ public class PlayerAction : MonoBehaviour
         AttackType.Normal       => 1.0f,
         AttackType.HipDrop      => 10.0f,
         AttackType.SuperHipDrop => 50.0f,
-        _                       => 1.0f
+        _                       => 1.0f // それ以外
     };
     private float ConditionMultiplier => (status.CurrentCondition == PlayerCondition.Burn) ? 2.0f : 1.0f;
-    private int TouchDamage => (status.CurrentCondition == PlayerCondition.Burn)? 1:5;
+    private int TouchDamage => (status.CurrentCondition == PlayerCondition.Burn) ? 1 : 5;
 
     // 他クラスや表示モデルに関するデータ
     private Rigidbody rb;
@@ -103,10 +103,12 @@ public class PlayerAction : MonoBehaviour
     IEnumerator PerformAttack()
     {
         if (!CanAttack()) yield break;
+
         attackHitbox.SetActive(true);                   // 攻撃範囲を表示
         anim.SetBool("isAttacking", true);              // アニメーターのパラメータ変更
         attackRenderer.material.color = Color.yellow;   // 色を黄色に
         yield return new WaitForSeconds(attackDuration);// 攻撃時間分
+
         attackHitbox.SetActive(false);                  // 攻撃範囲を非表示
         anim.SetBool("isAttacking", false);             // アニメーターのパラメータ変更
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerLookController : MonoBehaviour
 {
     public int scale = 2;
+
     // レシートのモデル
     [SerializeField] private GameObject addModel1;
     [SerializeField] private GameObject addModel2;
@@ -16,6 +17,11 @@ public class PlayerLookController : MonoBehaviour
 
     [SerializeField] private Material FaceMaterial; // 顔のマテリアル
     [SerializeField] private Material DispMaterial; // もう一つのディスプレイのマテリアル
+
+    // ライト
+    [SerializeField] private Light MonitorSpotlight;
+    [SerializeField] private Light MonitorPointLight;
+
     private bool LightisBoosted = false;
     private bool LightisPowered = false;
     private bool frag = false;
@@ -66,29 +72,17 @@ public class PlayerLookController : MonoBehaviour
         // 上矢印キーでライトの強弱を変更
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (LightisBoosted)
-            {
-                DispMaterial.SetFloat("_EmissionIntensity", 1f);   // 値を強める
-                FaceMaterial.SetFloat("_EmissionIntensity", 1f);   // 値を強める
-            }
-            else
-            {
-                DispMaterial.SetFloat("_EmissionIntensity", 10f); // 値を弱める
-                FaceMaterial.SetFloat("_EmissionIntensity", 10f); // 値を弱める
-            }
-            LightisBoosted = !LightisBoosted;
-        }
-
-        // 下矢印キーでライトのon/offを変更
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
             if (LightisPowered)
             {
                 DispMaterial.SetVector("_ExpressionOffset", new Vector2(0f, 0f));
+                MonitorSpotlight.gameObject.SetActive(false);
+                MonitorPointLight.gameObject.SetActive(false);
             }
             else
             {
                 DispMaterial.SetVector("_ExpressionOffset", new Vector2(0.5f, 0f));
+                MonitorSpotlight.gameObject.SetActive(true);
+                MonitorPointLight.gameObject.SetActive(true);
             }
             LightisPowered = !LightisPowered;
         }
