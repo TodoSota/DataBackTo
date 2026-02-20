@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 5997460501546880267}
   - component: {fileID: 1680762134795373496}
   - component: {fileID: 2684659512925591852}
-  - component: {fileID: -9103792326777698812}
   m_Layer: 8
   m_Name: Floater
   m_TagString: Untagged
@@ -214,29 +213,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c42a4f4dc9bd144ca5178cf6c81af2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-9103792326777698812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2755482224631225600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 213d0ffeed3e4044fa920577f4a410b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Status: {fileID: 0}
-  ChaseRate: 2
-  Eye:
-    ViewRadius: 10
-    ViewAngle: 90
-    EyeOffsetAngle: 45
-    TargetMask:
-      serializedVersion: 2
-      m_Bits: 64
-    ObstacleMask:
-      serializedVersion: 2
-      m_Bits: 128
-  Motor: {fileID: 0}
-  <IsFlying>k__BackingField: 0
