@@ -8927,7 +8927,6 @@ MonoBehaviour:
   _waitTimeClearEffect: 1
   _waitTimeAfterShake: 2
   _mapData: {fileID: 11400000, guid: 1ae50a24a9d14164cafbd2e406bfa328, type: 2}
-  _stageName: SampleStage
   _player: {fileID: 1958061437}
 --- !u!4 &1167185604
 Transform:

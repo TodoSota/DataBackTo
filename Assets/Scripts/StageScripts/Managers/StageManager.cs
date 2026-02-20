@@ -15,7 +15,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] private float _waitTimeAfterShake = 2f;
     
     [SerializeField] private MapData _mapData;
-    [SerializeField] private string _stageName;
     [SerializeField] private GameObject _player;
     private void Awake()
     {
@@ -69,7 +68,7 @@ public class StageManager : MonoBehaviour
     }
     private IEnumerator SetClearFlag()
     {
-        _mapData.SetClearFlag(_stageName);
+        _mapData.SetClearFlag(SceneManager.GetActiveScene().name);
         yield return null;
     }
 

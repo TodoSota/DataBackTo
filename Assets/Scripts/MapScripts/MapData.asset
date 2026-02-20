@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5786b95194c42a844a408e628c8efbf4, type: 3}
   m_Name: MapData
   m_EditorClassIdentifier: 
-  CurrentStageID: 1-1
+  CurrentStageID: 1-3
   StageProgressList:
   - StageID: SampleStage
     IsCleared: 1
   - StageID: 1-1
     IsCleared: 1
   - StageID: 1-2
-    IsCleared: 0
+    IsCleared: 1
   - StageID: 1-3
     IsCleared: 0
   - StageID: 1-4
