@@ -40,11 +40,21 @@ namespace MapScene
                     Debug.Log($"初期IDを設定しました: {_mapData.CurrentStageID}");
                 }
             }
-            _inputHandler.OnMoveInput += HandleMove;
-            _inputHandler.OnConfirmInput += PlayTheStage;
+            SetSelectHandler();
 
             // 初期表示
             _view.UpdateView(GetNodeByID(_mapData.CurrentStageID));
+        }
+
+        void SetSelectHandler()
+        {
+            _inputHandler.OnMoveInput += HandleMove;
+            _inputHandler.OnConfirmInput += PlayTheStage;
+        }
+        void RemoveSelectHandler()
+        {
+            _inputHandler.OnMoveInput -= HandleMove;
+            _inputHandler.OnConfirmInput -= PlayTheStage;
         }
 
         private void HandleMove(Vector2Int direction)
@@ -81,13 +91,9 @@ namespace MapScene
         // 指定ノードのステージをプレイする
         private void PlayTheStage()
         {
-            // <最低限>
+            RemoveSelectHandler();
             Debug.Log("index : "+_mapData.CurrentStageID+" のステージを選択");
-            
-            // <追加>
-            // 対応するステージをプレイ
-            // シーン移動
-            // 戻ってきたときは、カレントインデックスを指定すること
+
             StartCoroutine(StageStartSequence());
         }
 
