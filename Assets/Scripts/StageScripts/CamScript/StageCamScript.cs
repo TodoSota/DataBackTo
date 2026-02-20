@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering.Universal;
 
 public class StageCamScript : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class StageCamScript : MonoBehaviour
     public Color bgColor = Color.white;
     public LayerMask displayLayers;
     public Camera MainCamera; // ñ{ï®ÇÃÉJÉÅÉâ
+    public Light clearLight;
 
     void Start()
     {
@@ -24,7 +26,11 @@ public class StageCamScript : MonoBehaviour
         MainCamera.clearFlags = CameraClearFlags.SolidColor;
         MainCamera.backgroundColor = bgColor;
         MainCamera.cullingMask = displayLayers;
-        
-        ShakeCamera();
+
+        var urpCamData = MainCamera.GetComponent<UniversalAdditionalCameraData>();
+        if (urpCamData != null)
+        {
+            urpCamData.renderPostProcessing = false;
+        }
     }
 }
