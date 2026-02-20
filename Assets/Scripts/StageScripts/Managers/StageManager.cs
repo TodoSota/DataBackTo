@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Playables;
+using MapScene;
 
 public class StageManager : MonoBehaviour
 {
@@ -52,10 +53,10 @@ public class StageManager : MonoBehaviour
 
         _clearDirector.Play();
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
+        _stageClear.gameObject.SetActive(false);
         yield return SetClearFlag();
 
-        SceneManager.LoadScene("MapScene");
+        TransitionManager.Instance.StartTransition("Stage Map", "MapScene");
     }
     
     private void DestroyObjectsByTag(string tagName)
