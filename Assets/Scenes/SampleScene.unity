@@ -12266,6 +12266,26 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 1513168758490639996, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2144266219051642139, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476661427466407228, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4002064328918952414, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092652542648696442, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 6563641272827863193, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -12346,9 +12366,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7672859322199749930, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813433522266407589, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226630421073028679, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 8297881282704779836, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
       propertyPath: m_Name
       value: TransitionCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8297881282704779836, guid: 67333b7c04c9cbe449c33fa6f010ea6c, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
