@@ -8,6 +8,8 @@ TagManager:
   - Coin
   - Enemy
   - KillZone
+  - Projectile
+  - Clear
   layers:
   - Default
   - TransparentFX
@@ -21,8 +23,8 @@ TagManager:
   - EnemyBullet
   - Key
   - Respawner
-  - 
-  - 
+  - Projectile
+  - Clear
   - 
   - 
   - 

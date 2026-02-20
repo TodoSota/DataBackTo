@@ -27,6 +27,9 @@ public class PlayerAction : MonoBehaviour
 
     // UŒ‚—Í : ŠeŽís“®‚ÌÛ‚É“K‹XUŒ‚—Í‚ð“ü—Í‚·‚é
     [SerializeField] private int basePower = 1;
+
+    // UŒ‚ƒqƒbƒgŽž‚ÌƒqƒbƒgƒXƒgƒbƒvŽžŠÔ
+    [SerializeField] private float hitDuration = 0.1f;
     private float GetAttackTypeMultiplier(AttackType type) => type switch
     {
         AttackType.Normal       => 1.0f,
@@ -187,6 +190,7 @@ public class PlayerAction : MonoBehaviour
 
             UnityEngine.Debug.Log("Hit! HipDrop!");UnityEngine.Debug.Log("Hit! Attack!");
             int damage = GetFinalDamage(currentAttackType);
+            StageManager.Instance.PlayHitstop(hitDuration);
             other.GetComponent<EnemyController>().TakeDamage(damage, transform.position);
         }
     }

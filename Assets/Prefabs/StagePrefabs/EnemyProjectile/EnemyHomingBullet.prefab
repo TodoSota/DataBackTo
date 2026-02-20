@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 6755763843255971086}
   - component: {fileID: 5010991473205827696}
   - component: {fileID: -936881403100466397}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: EnemyHomingBullet
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

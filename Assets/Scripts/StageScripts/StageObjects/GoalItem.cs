@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GoalItem : MonoBehaviour
 {
-    [SerializeField] private GameObject _clearUI;
-
     private bool isReached = false;
 
     private void OnTriggerEnter(Collider other)

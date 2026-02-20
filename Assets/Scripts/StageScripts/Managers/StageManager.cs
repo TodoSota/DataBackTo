@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Playables;
 
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
-    [SerializeField] Animator clearAnime;
+    [SerializeField] private PlayableDirector _clearDirector;
+    [SerializeField] private Image _stageClear;
+    [SerializeField] private float _waitTimeClearEffect = 0.5f;
     [SerializeField] private float _waitTimeAfterShake = 2f;
+    
     [SerializeField] private MapData _mapData;
     [SerializeField] private string _stageName;
     [SerializeField] private GameObject _player;
@@ -38,14 +43,29 @@ public class StageManager : MonoBehaviour
 
     private IEnumerator ClearSequence()
     {
-        clearAnime.SetTrigger("Clear");
-        yield return new WaitForSeconds(_waitTimeAfterShake);
+        DestroyObjectsByTag("Enemy");
+        DestroyObjectsByTag("Projectile");
+        Debug.Log("Clear");
+
+        PlaySlowMotion(_waitTimeClearEffect);
+        yield return new WaitForSeconds(_waitTimeClearEffect);
+
+        _clearDirector.Play();
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
         yield return SetClearFlag();
 
         SceneManager.LoadScene("MapScene");
     }
-
+    
+    private void DestroyObjectsByTag(string tagName)
+    {
+        GameObject[] objectsToDestroy = GameObject.FindGameObjectsWithTag(tagName);
+        foreach (GameObject obj in objectsToDestroy)
+        {
+            Destroy(obj);
+        }
+    }
     private IEnumerator SetClearFlag()
     {
         _mapData.SetClearFlag(_stageName);
@@ -80,5 +100,33 @@ public class StageManager : MonoBehaviour
             GameOverManager.Instance.GameOver();
         }
         yield return null;
+    }
+
+    public void PlayHitstop(float duration)
+    {
+        StartCoroutine(HitstopCoroutine(duration));
+    }
+
+    private IEnumerator HitstopCoroutine(float duration)
+    {
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1f;
+    }
+
+    public void PlaySlowMotion(float duration, float slowScale = 0.2f)
+    {
+        StartCoroutine(SlowMotionCoroutine(duration, slowScale));
+    }
+
+    private IEnumerator SlowMotionCoroutine(float duration, float slowScale)
+    {
+        Time.timeScale = slowScale;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+        yield return new WaitForSecondsRealtime(duration);
+
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
     }
 }
