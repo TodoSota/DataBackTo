@@ -5,7 +5,6 @@ using UnityEngine.VFX;
 public class SparkBullet : MonoBehaviour
 {
     [SerializeField] private int _sparkAmount = 5;
-    private float _bulletRadius;
     [SerializeField] float _offset;
     private float _radius;
 
@@ -13,7 +12,7 @@ public class SparkBullet : MonoBehaviour
     
     private List<VisualEffect> _sparks = new List<VisualEffect>();
 
-    [SerializeField] private Vector2 _waitTimeRange = new Vector2(0.1f, 0.5f); 
+    [SerializeField] private Vector2 _waitTimeRange = new Vector2(0.1f, 0.5f);
 
     private Timer _timer = new Timer();
     void Start()
@@ -58,12 +57,20 @@ public class SparkBullet : MonoBehaviour
         if (idleSparks.Count > 0)
         {
             int randomIndex = Random.Range(0, idleSparks.Count);
+            
+
             var spark = idleSparks[randomIndex];
 
-            spark.Reinit();
-            SetPosition(spark);
-            spark.SendEvent("OnFire");
+            Spark(spark);
         }
+    }
+
+
+    void Spark(VisualEffect spark)
+    {
+        spark.Reinit();
+        SetPosition(spark);
+        spark.SendEvent("OnFire");
     }
 
     void SetPosition(VisualEffect _spark)

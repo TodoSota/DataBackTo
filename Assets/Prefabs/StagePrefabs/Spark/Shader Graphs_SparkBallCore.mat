@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4622702183329036146
+--- !u!114 &-177022396907967953
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SparkBullet
-  m_Shader: {fileID: -6465566751694194690, guid: e3e4f558019ce1e4ba1e80df9c71af70, type: 3}
+  m_Name: Shader Graphs_SparkBallCore
+  m_Shader: {fileID: -6465566751694194690, guid: e103a56813186e5499e5a3ac75a1734d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -36,6 +36,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _FlashTex:
+        m_Texture: {fileID: 2800000, guid: 9f3412aa4c284fd789ddd14cc0dc6450, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlashTex2:
+        m_Texture: {fileID: 2800000, guid: e56a7856b200ba244b0dc4c6ce140944, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PrismTex:
+        m_Texture: {fileID: 2800000, guid: a2eeaf799c94453fa647688741ae6121, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -50,9 +62,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _NoisePower: 10
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _BaseColor: {r: 0.7827691, g: 3.6075473, b: 3.4241996, a: 1}
+    - _Color: {r: 0, g: 10.680627, b: 1.4233131, a: 0}
+    - _Color2: {r: 5.992157, g: 5.992157, b: 0, a: 0}
   m_BuildTextureStacks: []
