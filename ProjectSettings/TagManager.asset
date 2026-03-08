@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - Coin
   - Enemy
+  - KillZone
+  - Projectile
+  - Clear
   layers:
   - Default
   - TransparentFX
@@ -14,15 +17,15 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Ground
+  - Enemy
+  - EnemyBullet
+  - Key
+  - Respawner
+  - Projectile
+  - Clear
+  - Transition
   - 
   - 
   - 

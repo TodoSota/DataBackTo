@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MapScene
 {
@@ -8,78 +9,101 @@ namespace MapScene
     {
         public StageNode[] StageNodes;
 
-        private int CurrentStageIndex;
-        [SerializeField] private MapCam _mapCam; 
-        [SerializeField] private float DISTANCE_FROM_NODE = 5f; // readonlyを消したもの
-        // カーソル
-        [SerializeField] private MapCursor cursor;
+        [SerializeField]private MapData _mapData;
+
+        [SerializeField] private MapInputHandler _inputHandler;
+        [SerializeField] private MapView _view;
+
+        public static StageSelectManager Instance;
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         void Start()
         {
-            // ゲームシーンから戻ってきた際はCurrentStageIndexを対応したものにする必要がある
+            // ゲームシーンから戻ってきた際は_mapData.CurrentStageIDを対応したものにする必要がある
             // スクリプタブルオブジェクトなどを用いてシーンをまたいだ管理が必要
-            MoveAboveNode(CurrentStageIndex);
-            SetUpStageNodeIndex();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            HandleArrowKeyInput();
-            HandleReturnKeyInput();
-        }
-
-        // 指定ノードへのカメラの移動
-        public void MoveAboveNode(int index)
-        {
-            if (index < 0 || index >= StageNodes.Length) return;
-            Vector3 nodePos = StageNodes[index].GetPosition();
-            _mapCam.Move(new Vector3(nodePos.x, DISTANCE_FROM_NODE, nodePos.z));
-            cursor.Move(nodePos);
-        }
-
-        // ステージ番号の割り振り
-        public void SetUpStageNodeIndex()
-        {
-            for(int i = 0; i < StageNodes.Length; i++)
+            ApplyDataToNodes();
+            if (string.IsNullOrEmpty(_mapData.CurrentStageID) || GetNodeByID(_mapData.CurrentStageID) == null)
             {
-                StageNodes[i].SetIndex(i);
+                if (StageNodes != null && StageNodes.Length > 0)
+                {
+                    _mapData.CurrentStageID = StageNodes[0].gameObject.name;
+                    Debug.Log($"初期IDを設定しました: {_mapData.CurrentStageID}");
+                }
             }
+            SetSelectHandler();
+
+            // 初期表示
+            _view.UpdateView(GetNodeByID(_mapData.CurrentStageID));
         }
-        // 矢印キー入力による移動処理
-        private void HandleArrowKeyInput()
+
+        void SetSelectHandler()
         {
+            _inputHandler.OnMoveInput += HandleMove;
+            _inputHandler.OnConfirmInput += PlayTheStage;
+        }
+        void RemoveSelectHandler()
+        {
+            _inputHandler.OnMoveInput -= HandleMove;
+            _inputHandler.OnConfirmInput -= PlayTheStage;
+        }
+
+        private void HandleMove(Vector2Int direction)
+        {
+            StageNode currentNode = GetNodeByID(_mapData.CurrentStageID);
             StageNode nextNode = null;
-            StageNode currentNode = StageNodes[CurrentStageIndex];
+        
+            if (direction == Vector2Int.left) nextNode = currentNode.leftNode;
+            else if (direction == Vector2Int.right) nextNode = currentNode.rightNode;
+            else if (direction == Vector2Int.up) nextNode = currentNode.upNode;
+            else if (direction == Vector2Int.down) nextNode = currentNode.downNode;
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) nextNode = currentNode.leftNode;
-            else if (Input.GetKeyDown(KeyCode.UpArrow)) nextNode = currentNode.upNode;
-            else if (Input.GetKeyDown(KeyCode.RightArrow)) nextNode = currentNode.rightNode;
-            else if (Input.GetKeyDown(KeyCode.DownArrow)) nextNode = currentNode.downNode;
+            if (nextNode == null) return;
+            if(!(currentNode.IsCleared || nextNode.IsCleared)) return;
 
-            if(nextNode is not null)
-            {
-                CurrentStageIndex = nextNode.StageIndex;
-                MoveAboveNode(CurrentStageIndex);
-            }
+            _mapData.CurrentStageID = nextNode.name;
+            _view.UpdateView(nextNode);
         }
 
-        // リターン（Enterキー）によるステージ決定処理
-        private void HandleReturnKeyInput()
+        private StageNode GetNodeByID(string id)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                PlayTheStage(CurrentStageIndex);
-            }
+            return System.Array.Find(StageNodes, n => n.name == id);
         }
 
+        private void ApplyDataToNodes()
+        {
+            foreach (var node in StageNodes)
+            {
+                // MapDataからIDをキーにしてクリア状況を取得
+                bool cleared = _mapData.GetIsCleared(node.name);
+                node.SetClearFlag(cleared);
+            }
+        }
         // 指定ノードのステージをプレイする
-        private void PlayTheStage(int index)
+        private void PlayTheStage()
         {
-            Debug.Log("index : "+index+" のステージを選択");
-            // 対応するステージをプレイ
-            // シーン移動
-            // 戻ってきたときは、カレントインデックスを指定すること
+            RemoveSelectHandler();
+            Debug.Log("index : "+_mapData.CurrentStageID+" のステージを選択");
+
+            StartCoroutine(StageStartSequence());
+        }
+
+        private IEnumerator StageStartSequence()
+        {
+            // 何かしらの演出など
+
+            yield return new WaitForSeconds(0.1f);
+            StageNode currentNode = GetNodeByID(_mapData.CurrentStageID);
+            TransitionManager.Instance.StartTransition(_mapData.CurrentStageID, currentNode.StageName);
         }
     }
 }

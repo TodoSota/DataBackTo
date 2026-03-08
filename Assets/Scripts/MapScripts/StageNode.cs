@@ -13,9 +13,8 @@ namespace MapScene
         public StageNode rightNode;
 
         // ステージ情報
-        public string stageName;
-        public int StageIndex;
-        [SerializeField] private bool isCleared;
+        [SerializeField] public bool IsCleared = false;
+        [SerializeField] public string StageName;
 
         // オブジェクト情報
         private MeshRenderer _renderer;
@@ -24,18 +23,12 @@ namespace MapScene
         [SerializeField] private Material _clearedMaterial;
         [SerializeField] private Material _unclearedMaterial;
 
-        void Start()
+        void Awake()
         {
             _renderer = GetComponent<MeshRenderer>();
-
-            UpdateMaterial();
         }
 
         // インデックスが何番目か？をマネージャーから教えるための関数
-        public void SetIndex(int index)
-        {
-            StageIndex = index;
-        }
 
         // Unityエディタ上で何か変更されたら
         void OnValidate()
@@ -68,14 +61,14 @@ namespace MapScene
         {
             if (_renderer == null) return;
 
-            Material mat = isCleared ? _clearedMaterial : _unclearedMaterial;
+            Material mat = IsCleared ? _clearedMaterial : _unclearedMaterial;
             _renderer.material = mat;
         }
 
         // クリア状態を変更
         public void SetClearFlag(bool flag)
         {
-            isCleared = flag;
+            IsCleared = flag;
             UpdateMaterial();
         }
 
