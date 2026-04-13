@@ -32,7 +32,7 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         var PlayerStatus = _player.GetComponent<PlayerStatus>();
-        PlayerStatus.dieAction+=OnPlayerDeath;
+        PlayerStatus.dieAction += OnPlayerDeath;
     }
 
     public void ClearStage()
@@ -47,6 +47,8 @@ public class StageManager : MonoBehaviour
         DestroyObjectsByTag("Projectile");
         Debug.Log("Clear");
 
+        _player.GetComponent<PlayerController>().DisablePhysics();
+
         PlaySlowMotion(_waitTimeClearEffect);
         yield return new WaitForSeconds(_waitTimeClearEffect);
 
@@ -57,7 +59,7 @@ public class StageManager : MonoBehaviour
 
         TransitionManager.Instance.StartTransition("Stage Map", "MapScene");
     }
-    
+
     private void DestroyObjectsByTag(string tagName)
     {
         GameObject[] objectsToDestroy = GameObject.FindGameObjectsWithTag(tagName);
