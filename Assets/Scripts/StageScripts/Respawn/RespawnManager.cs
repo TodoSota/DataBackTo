@@ -25,13 +25,13 @@ public class RespawnManager : MonoBehaviour
 
     public void Respawn()
     {
-        PlayerController playerController = _player.GetComponent<PlayerController>();
-        Vector3 safePos = playerController.lastSafePosition;
+        PlayerMovement PlayerMovement = _player.GetComponent<PlayerMovement>();
+        Vector3 safePos = PlayerMovement.LastSafePosition;
         
         float halfHeight = _respawner.GetComponent<Renderer>().bounds.size.y / 2.0f;
         Vector3 spawnerPos = new Vector3(safePos.x, _spawnPos.y - halfHeight, safePos.z) + _spawnPos;
 
         _respawner.SetRespawner(spawnerPos);
-        playerController.Warp(spawnerPos + OFFSET);
+        PlayerMovement.Warp(spawnerPos + OFFSET);
     }
 }
