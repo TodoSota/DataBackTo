@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float defaultJumpForce = 5.0f;
     [SerializeField] private float ShortJumpRate = 0.8f;
     [SerializeField] private float BurnJumpRate = 1.5f;
-
     // ジャンプ力のプロパティ
     public float jumpForce => (status.CurrentCondition == PlayerCondition.Short)? defaultJumpForce * ShortJumpRate :
                                (status.CurrentCondition == PlayerCondition.Burn)? defaultJumpForce * BurnJumpRate :
@@ -119,17 +118,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
     }
 
-    public void EnablePhysics()
-    {
-        Stop();
-        rb.isKinematic = true;
-    }
-
-    public void DisablePhysics()
-    {
-        rb.isKinematic = false;
-    }
-
     void OnPlayerDeath()
     {
         rb.isKinematic = true;
@@ -137,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
     void SetUp()
     {
-        DisablePhysics();
+        rb.isKinematic = false;
         Stop();
     }
 
