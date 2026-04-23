@@ -17,9 +17,9 @@ public abstract class BulletAbstract : MonoBehaviour
     void OnTriggerEnter(Collider other) {
         if ((Data.TargetLayers.value & (1 << other.gameObject.layer)) > 0)
         {
-            if (other.TryGetComponent<PlayerController>(out var player))
+            if (other.TryGetComponent<PlayerStatus>(out var player))
             {
-                player.TakeDamage(Data.Damage, transform.position, Data.Condition);
+                player.TakeDamage(Data.Damage, Data.Condition);
                 //　<追加>ダメージ処理
                 Debug.Log("<color=blue>Player</color>にダメージ!!");
             }
