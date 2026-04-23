@@ -65,7 +65,6 @@ public class PlayerPresenter : MonoBehaviour
         view.UpdateMoveAnimation(Mathf.Abs(input.HorizontalInput));
         view.UpdateGroundAnimation(movement.IsGrounded);
         view.FlapReceipt(movement.LocalVelocityY);
-        Debug.Log(movement.LocalVelocityY);
     }
 
     // =================================================
@@ -149,11 +148,17 @@ public class PlayerPresenter : MonoBehaviour
         view.SetMonitorLight(isMonitorPowered);
     }
 
+    // レシート発行
     private void HandleReceiptSave()
     {
-        receiptSystem.SaveState();
+        StartCoroutine(view.PlayScanEffect(() =>
+        {
+            // エフェクトが完全に終わった後にこれが呼ばれる
+            receiptSystem.SaveState();
+        }));
     }
 
+    // レシート使用
     private void HandleReceiptLoad()
     {
         receiptSystem.LoadState();
@@ -166,7 +171,7 @@ public class PlayerPresenter : MonoBehaviour
         combat.CancelAttacks();
 
         // レシートがあるなら復活可能
-        if (receiptSystem.receiptStack.Count > 0)
+        if (receiptSystem.receiptQueue.Count > 0)
         {
             Debug.Log("レシートを使って復活します！");
 
