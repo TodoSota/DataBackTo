@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 //
@@ -26,6 +28,11 @@ public class PlayerView : MonoBehaviour
     [Header("Lights")]
     [SerializeField] private Light monitorSpotlight;
 
+    private Renderer[] targetRenderers;// 対象となるモデルのレンダラー全て
+    public float scanDuration = 2.0f; // スキャンにかかる時間
+    private float scanStartY = -0.5f; // モデルの下端のY座標（ローカル）
+    private float scanEndY = 1.5f;   // モデルの上端のY座標（ローカル）
+
     void Start()
     {
         // コンポーネントがアタッチされていなければ自動取得
@@ -39,6 +46,9 @@ public class PlayerView : MonoBehaviour
         {
             if (model != null) model.SetActive(false);
         }
+
+        // レシート発行時のアニメーションの対象になるレンダラーをすべて集める
+        targetRenderers = GetComponentsInChildren<Renderer>(true);
     }
 
     // ==========================================
@@ -92,6 +102,46 @@ public class PlayerView : MonoBehaviour
             playerRenderer.material.SetColor("_EmissionColor", Color.black);
             playerRenderer.material.DisableKeyword("_EMISSION");
         }
+    }
+
+    // レシート発行時に呼ばれるコルーチン
+    public IEnumerator PlayScanEffect(Action onComplete = null)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < scanDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float currentY = Mathf.Lerp(scanStartY, scanEndY, elapsedTime / scanDuration);
+
+            // 取得した全ての子要素モデルのRendererに対して処理を行う
+            foreach (var rend in targetRenderers)
+            {
+                // 走査線が走るのは全てレンダラーに対してなので、嫌ならここで名前などで弾く
+                // 対象が MeshRenderer か SkinnedMeshRenderer の時だけ処理する
+                if (rend is MeshRenderer || rend is SkinnedMeshRenderer)
+                {
+                    if (rend.material.HasProperty("_ScanlineY"))
+                    {
+                        rend.material.SetFloat("_ScanlineY", currentY);
+                    }
+                }
+            }
+            Debug.Log(currentY);
+            yield return null;
+        }
+
+        foreach (var rend in targetRenderers)
+        {
+            if (rend is MeshRenderer || rend is SkinnedMeshRenderer)
+            {
+                if (rend.material.HasProperty("_ScanlineY"))
+                {
+                    rend.material.SetFloat("_ScanlineY", -999f);
+                }
+            }
+        }
+        onComplete?.Invoke();
     }
 
     // ==========================================
