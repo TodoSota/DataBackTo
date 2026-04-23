@@ -26,7 +26,7 @@ public class PlayerInput : MonoBehaviour
 
     // --- 長押し判定用の設定・内部変数 ---
     [Header("Input Settings")]
-    [SerializeField] private float receiptHoldRequiredTime = 0.5f;
+    [SerializeField] private float receiptHoldRequiredTime = 0.2f;
     private float holdTimer = 0f;
     private bool isSaveProcessed = false;
 

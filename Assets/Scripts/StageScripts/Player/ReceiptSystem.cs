@@ -27,7 +27,7 @@ public class ReceiptSystem : MonoBehaviour
     public int maxReceiptLimit = 3;     // 最大保持数
 
     // レシート保存の格納場所
-    public List<ReceiptData> receiptStack = new List<ReceiptData>();
+    public List<ReceiptData> receiptQueue = new List<ReceiptData>();
 
     private PlayerStatus status;
 
@@ -41,25 +41,25 @@ public class ReceiptSystem : MonoBehaviour
 
     public void SaveState()
     {
-        if (receiptStack.Count >= maxReceiptLimit) return;  // 上限なら終了
+        if (receiptQueue.Count >= maxReceiptLimit) return;  // 上限なら終了
 
         // 記録したデータを格納
         ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount, status.CurrentCondition);
-        receiptStack.Add(newData);
+        receiptQueue.Add(newData);
 
         // レシート上書きでのイベント発火
-        OnReceiptUpdate?.Invoke(receiptStack);
+        OnReceiptUpdate?.Invoke(receiptQueue);
 
-        UnityEngine.Debug.Log("Receipt Done!! : " + receiptStack.Count);
+        UnityEngine.Debug.Log("Receipt Done!! : " + receiptQueue.Count);
     }
 
     public bool LoadState()
     {
-        if (receiptStack.Count <= 0) return false;    // 所持がなければ実行不可
+        if (receiptQueue.Count <= 0) return false;    // 所持がなければ実行不可
 
         // 最新のデータを取り出す（元の仕様通りインデックス0を取得）
         int firstIndex = 0;
-        ReceiptData data = receiptStack[firstIndex];
+        ReceiptData data = receiptQueue[firstIndex];
 
         // PlayerStatus に値を書き戻す
         status.OverwriteHp(data.savedHp);
@@ -71,12 +71,12 @@ public class ReceiptSystem : MonoBehaviour
         //
 
         // 使用済みのものは破棄
-        receiptStack.RemoveAt(firstIndex);
+        receiptQueue.RemoveAt(firstIndex);
 
         // レシート上書きでのイベント発火
-        OnReceiptUpdate?.Invoke(receiptStack);
+        OnReceiptUpdate?.Invoke(receiptQueue);
 
-        UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
+        UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptQueue.Count);
         status.DisplayState();
         return true;
     }
