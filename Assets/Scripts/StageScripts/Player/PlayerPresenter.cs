@@ -1,8 +1,8 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 //
-// MVP ‚Ì "P" |  Player ‚É‚Ü‚Â‚í‚é”X‘S‚Ä‚É‚±‚±‚Åw¦‚¾‚µ
+// MVP ã® "P" |  Player ã«ã¾ã¤ã‚ã‚‹è«¸ã€…å…¨ã¦ã«ã“ã“ã§æŒ‡ç¤ºã ã—
 //
 public class PlayerPresenter : MonoBehaviour
 {
@@ -14,15 +14,15 @@ public class PlayerPresenter : MonoBehaviour
     [SerializeField] private PlayerCombat combat;
     [SerializeField] private ReceiptSystem receiptSystem;
 
-    // “à•”ó‘Ô‚Ì•Û
+    // å†…éƒ¨çŠ¶æ…‹ã®ä¿æŒ
     private bool isMonitorPowered = false;
     private bool isFaceAlternative = false;
 
-    // ƒCƒxƒ“ƒgw“ÇiInput‚©‚ç‚Ì’Ê’m‚ÆÀs‚·‚éˆ—‚ğ•R‚Ã‚¯j
+    // ã‚¤ãƒ™ãƒ³ãƒˆè³¼èª­ï¼ˆInputã‹ã‚‰ã®é€šçŸ¥ã¨å®Ÿè¡Œã™ã‚‹å‡¦ç†ã‚’ç´ã¥ã‘ï¼‰
     private void Start()
     {
         // ===================================
-        // “ü—ÍiInputj‚©‚ç
+        // å…¥åŠ›ï¼ˆInputï¼‰ã‹ã‚‰
         // ===================================
         input.OnJumpPressed += HandleJump;
         input.OnAttackPressed += HandleAttack;
@@ -31,58 +31,59 @@ public class PlayerPresenter : MonoBehaviour
         input.OnReceiptLoadTriggered += HandleReceiptLoad;
 
         // ===================================
-        // UŒ‚iCombatj‚©‚ç•`‰æiViewj‚Ö
+        // æ”»æ’ƒï¼ˆCombatï¼‰ã‹ã‚‰æç”»ï¼ˆViewï¼‰ã¸
         // ===================================
         combat.OnAttackStateChanged += view.SetAttackAnimation;
         combat.OnHipdropStateChanged += view.SetHipDropAnimation;
         combat.OnAttackColorChanged += view.SetAttackColor;
 
         // ===================================
-        // ƒXƒe[ƒ^ƒXiStatusj
+        // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼ˆStatusï¼‰
         // ===================================
         status.dieAction += HandleDeath;
 
         // ===================================
-        // ˆÚ“®iMovementj
+        // ç§»å‹•ï¼ˆMovementï¼‰
         // ===================================
         movement.OnLanded += status.ResetJumpConut;
 
         // ===================================
-        // Œ©‚½–Ú‚Öiviewj
+        // è¦‹ãŸç›®ã¸ï¼ˆviewï¼‰
         // ===================================
         receiptSystem.OnReceiptUpdate.AddListener(receipts => view.UpdateReceiptDisplay(receipts.Count));
     }
 
-    // –ˆƒtƒŒ[ƒ€‚Ìˆ—
+    // æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã®å‡¦ç†
     private void Update()
     {
         if (status.isDead) return;
 
-        // ˆÚ“®“ü—Í‚Æó‘ÔˆÙí‚ğ Movement ‚É“n‚·
+        // ç§»å‹•å…¥åŠ›ã¨çŠ¶æ…‹ç•°å¸¸ã‚’ Movement ã«æ¸¡ã™
         movement.SetMovementInput(input.HorizontalInput, status.CurrentCondition);
 
-        // ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV‚ğ View ‚É“n‚·
+        // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°ã‚’ View ã«æ¸¡ã™
         view.UpdateMoveAnimation(Mathf.Abs(input.HorizontalInput));
         view.UpdateGroundAnimation(movement.IsGrounded);
         view.FlapReceipt(movement.LocalVelocityY);
+        view.SetLoadAnimation(input.IsEnterPressed);
     }
 
     // =================================================
-    // ƒvƒŒƒCƒ„[‚Ì“ü—Í‚©‚ç‚Ì”­“®–€ (ƒQ[ƒ€‚ÌƒƒWƒbƒN)
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¥åŠ›ã‹ã‚‰ã®ç™ºå‹•äº‹é … (ã‚²ãƒ¼ãƒ ã®ãƒ­ã‚¸ãƒƒã‚¯)
     // =================================================
 
-    // ƒWƒƒƒ“ƒvƒƒWƒbƒN
+    // ã‚¸ãƒ£ãƒ³ãƒ—ãƒ­ã‚¸ãƒƒã‚¯
     private void HandleJump()
     {
         if (status.isDead) return;
 
-        // ‹K’è‰ñ”‚Ü‚Å‚È‚ç–³
+        // è¦å®šå›æ•°ã¾ã§ãªã‚‰ç„¡å„Ÿ
         if (status.currentJumpCount < status.maxJumpLimit)
         {
             movement.ExecuteJump();
             status.currentJumpCount++;
         }
-        else@// ‹K’è‰ñ”‚ğ’´‚¦‚Ä‚¢‚½‚çA‚¨‹àiƒWƒƒƒ“ƒv‰ñ”+1j‚ğÁ”ï‚µ‚Ä”­“®
+        elseã€€// è¦å®šå›æ•°ã‚’è¶…ãˆã¦ã„ãŸã‚‰ã€ãŠé‡‘ï¼ˆã‚¸ãƒ£ãƒ³ãƒ—å›æ•°+1ï¼‰ã‚’æ¶ˆè²»ã—ã¦ç™ºå‹•
         {
             int cost = status.currentJumpCount + 1;
             if (status.money >= cost)
@@ -94,42 +95,42 @@ public class PlayerPresenter : MonoBehaviour
             }
         }
 
-        // ƒWƒƒƒ“ƒv‚µ‚½‚Æ‚«‚É•\î•Ï‰»”­“®!!...‚Å‚à‰¡‚©‚ç‚Ìƒrƒ…[‚È‚Ì‚ÅŒ©‚¦‚È‚¢‚©‚ç‚¢‚ç‚È‚¢...
+        // ã‚¸ãƒ£ãƒ³ãƒ—ã—ãŸã¨ãã«è¡¨æƒ…å¤‰åŒ–ç™ºå‹•!!...ã§ã‚‚æ¨ªã‹ã‚‰ã®ãƒ“ãƒ¥ãƒ¼ãªã®ã§è¦‹ãˆãªã„ã‹ã‚‰ã„ã‚‰ãªã„...
         isFaceAlternative = !isFaceAlternative;
         view.SetFaceExpression(isFaceAlternative);
     }
 
-    // UŒ‚ƒƒWƒbƒN
+    // æ”»æ’ƒãƒ­ã‚¸ãƒƒã‚¯
     private void HandleAttack()
     {
         if (status.isDead) return;
 
-        // ‡@ ’nã‚É‚¢‚éê‡
+        // â‘  åœ°ä¸Šã«ã„ã‚‹å ´åˆ
         if (movement.IsGrounded)
         {
-            if (input.IsShiftPressed)                   // Shift ‰Ÿ‰º”»’è
+            if (input.IsShiftPressed)                   // Shift æŠ¼ä¸‹åˆ¤å®š
             {
                 if (status.money >= 1)
                 {
                     status.AddMoney(-1);
-                    combat.ExecuteShoot();              // ËŒ‚UŒ‚
+                    combat.ExecuteShoot();              // å°„æ’ƒæ”»æ’ƒ
                 }
                 else
                 {
-                    Debug.Log("I have no money...");    // ‹à‚È‚µ‚È‚ç Shift ƒAƒNƒVƒ‡ƒ“‚Í‚Å‚«‚È‚¢
+                    Debug.Log("I have no money...");    // é‡‘ãªã—ãªã‚‰ Shift ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯ã§ããªã„
                 }
             }
             else
             {
-                combat.ExecuteNormalAttack();           // ’ÊíUŒ‚
+                combat.ExecuteNormalAttack();           // é€šå¸¸æ”»æ’ƒ
             }
         }
-        // ‡A ‹ó’†‚É‚¢‚éê‡
+        // â‘¡ ç©ºä¸­ã«ã„ã‚‹å ´åˆ
         else
         {
-            if (input.IsDownArrowPressed)       // ‰º–îˆóƒL[‚ğ‰Ÿ‰º
+            if (input.IsDownArrowPressed)       // ä¸‹çŸ¢å°ã‚­ãƒ¼ã‚’æŠ¼ä¸‹
             {
-                // ‚¨‹à‚ª10ˆÈã‚©‚ÂƒVƒtƒgƒL[‚È‚ç‹­‰»ƒqƒbƒvƒhƒƒbƒv
+                // ãŠé‡‘ãŒ10ä»¥ä¸Šã‹ã¤ã‚·ãƒ•ãƒˆã‚­ãƒ¼ãªã‚‰å¼·åŒ–ãƒ’ãƒƒãƒ—ãƒ‰ãƒ­ãƒƒãƒ—
                 bool isSuper = input.IsShiftPressed && status.money >= 10;
                 if (isSuper) status.AddMoney(-10);
 
@@ -137,7 +138,7 @@ public class PlayerPresenter : MonoBehaviour
             }
             else
             {
-                combat.ExecuteNormalAttack();   // ’ÊíUŒ‚
+                combat.ExecuteNormalAttack();   // é€šå¸¸æ”»æ’ƒ
             }
         }
     }
@@ -148,17 +149,17 @@ public class PlayerPresenter : MonoBehaviour
         view.SetMonitorLight(isMonitorPowered);
     }
 
-    // ƒŒƒV[ƒg”­s
+    // ãƒ¬ã‚·ãƒ¼ãƒˆç™ºè¡Œ
     private void HandleReceiptSave()
     {
         StartCoroutine(view.PlayScanEffect(() =>
         {
-            // ƒGƒtƒFƒNƒg‚ªŠ®‘S‚ÉI‚í‚Á‚½Œã‚É‚±‚ê‚ªŒÄ‚Î‚ê‚é
+            // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãŒå®Œå…¨ã«çµ‚ã‚ã£ãŸå¾Œã«ã“ã‚ŒãŒå‘¼ã°ã‚Œã‚‹
             receiptSystem.SaveState();
         }));
     }
 
-    // ƒŒƒV[ƒgg—p
+    // ãƒ¬ã‚·ãƒ¼ãƒˆä½¿ç”¨
     private void HandleReceiptLoad()
     {
         receiptSystem.LoadState();
@@ -166,17 +167,17 @@ public class PlayerPresenter : MonoBehaviour
 
     private void HandleDeath()
     {
-        // “®‚«‚ÆUŒ‚‚ğ’â~
+        // å‹•ãã¨æ”»æ’ƒã‚’åœæ­¢
         movement.SetKinematic(true);
         combat.CancelAttacks();
 
-        // ƒŒƒV[ƒg‚ª‚ ‚é‚È‚ç•œŠˆ‰Â”\
+        // ãƒ¬ã‚·ãƒ¼ãƒˆãŒã‚ã‚‹ãªã‚‰å¾©æ´»å¯èƒ½
         if (receiptSystem.receiptQueue.Count > 0)
         {
-            Debug.Log("ƒŒƒV[ƒg‚ğg‚Á‚Ä•œŠˆ‚µ‚Ü‚·I");
+            Debug.Log("ãƒ¬ã‚·ãƒ¼ãƒˆã‚’ä½¿ã£ã¦å¾©æ´»ã—ã¾ã™ï¼");
 
-            receiptSystem.LoadState(); // ƒŒƒV[ƒgÁ”ïEHP•œŒ³
-            status.Revive();           // €–Sƒtƒ‰ƒO‰ğœ
+            receiptSystem.LoadState(); // ãƒ¬ã‚·ãƒ¼ãƒˆæ¶ˆè²»ãƒ»HPå¾©å…ƒ
+            status.Revive();           // æ­»äº¡ãƒ•ãƒ©ã‚°è§£é™¤
 
             if (RespawnManager.Instance != null)
             {
@@ -184,19 +185,19 @@ public class PlayerPresenter : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("RespawnManager‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñI");
+                Debug.LogWarning("RespawnManagerãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ï¼");
             }
         }
         else
         {
-            // ƒŒƒV[ƒg‚ª‚È‚¢ê‡AƒQ[ƒ€ƒI[ƒo[ˆ—
+            // ãƒ¬ã‚·ãƒ¼ãƒˆãŒãªã„å ´åˆã€ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼å‡¦ç†
             Debug.Log("Game Over...");
         }
     }
 
     private void OnDestroy()
     {
-        // ƒƒ‚ƒŠƒŠ[ƒN–h~‚Ì‚½‚ßAƒIƒuƒWƒFƒNƒg”jŠü‚ÉƒCƒxƒ“ƒgw“Ç‚ğ‰ğœ
+        // ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯é˜²æ­¢ã®ãŸã‚ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç ´æ£„æ™‚ã«ã‚¤ãƒ™ãƒ³ãƒˆè³¼èª­ã‚’è§£é™¤
         if (input != null)
         {
             input.OnJumpPressed -= HandleJump;

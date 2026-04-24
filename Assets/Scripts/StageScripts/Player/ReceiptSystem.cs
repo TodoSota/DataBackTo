@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 //
-// MVP ‚Ì "M" | ƒŒƒV[ƒgiƒZ[ƒuƒf[ƒ^j‚Ì•Û‚Æ•œŒ³ƒƒWƒbƒN’S“–
+// MVP ã® "M" | ãƒ¬ã‚·ãƒ¼ãƒˆï¼ˆã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ï¼‰ã®ä¿æŒã¨å¾©å…ƒãƒ­ã‚¸ãƒƒã‚¯æ‹…å½“
 //
 public struct ReceiptData
 {
@@ -24,14 +24,14 @@ public struct ReceiptData
 public class ReceiptSystem : MonoBehaviour
 {
     [Header("Settings")]
-    public int maxReceiptLimit = 3;     // Å‘å•Û”
+    public int maxReceiptLimit = 3;     // æœ€å¤§ä¿æŒæ•°
 
-    // ƒŒƒV[ƒg•Û‘¶‚ÌŠi”[êŠ
+    // ãƒ¬ã‚·ãƒ¼ãƒˆä¿å­˜ã®æ ¼ç´å ´æ‰€
     public List<ReceiptData> receiptQueue = new List<ReceiptData>();
 
     private PlayerStatus status;
 
-    // ƒŒƒV[ƒg‚ÌƒCƒxƒ“ƒgUI‚ÌXV‚È‚Ç‚Ég—p
+    // ãƒ¬ã‚·ãƒ¼ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆUIã®æ›´æ–°ãªã©ã«ä½¿ç”¨
     public UnityEvent<List<ReceiptData>> OnReceiptUpdate;
 
     void Start()
@@ -41,13 +41,13 @@ public class ReceiptSystem : MonoBehaviour
 
     public void SaveState()
     {
-        if (receiptQueue.Count >= maxReceiptLimit) return;  // ãŒÀ‚È‚çI—¹
+        if (receiptQueue.Count >= maxReceiptLimit) return;  // ä¸Šé™ãªã‚‰çµ‚äº†
 
-        // ‹L˜^‚µ‚½ƒf[ƒ^‚ğŠi”[
+        // è¨˜éŒ²ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´
         ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount, status.CurrentCondition);
         receiptQueue.Add(newData);
 
-        // ƒŒƒV[ƒgã‘‚«‚Å‚ÌƒCƒxƒ“ƒg”­‰Î
+        // ãƒ¬ã‚·ãƒ¼ãƒˆä¸Šæ›¸ãã§ã®ã‚¤ãƒ™ãƒ³ãƒˆç™ºç«
         OnReceiptUpdate?.Invoke(receiptQueue);
 
         UnityEngine.Debug.Log("Receipt Done!! : " + receiptQueue.Count);
@@ -55,25 +55,25 @@ public class ReceiptSystem : MonoBehaviour
 
     public bool LoadState()
     {
-        if (receiptQueue.Count <= 0) return false;    // Š‚ª‚È‚¯‚ê‚ÎÀs•s‰Â
+        if (receiptQueue.Count <= 0) return false;    // æ‰€æŒãŒãªã‘ã‚Œã°å®Ÿè¡Œä¸å¯
 
-        // ÅV‚Ìƒf[ƒ^‚ğæ‚èo‚·iŒ³‚Ìd—l’Ê‚èƒCƒ“ƒfƒbƒNƒX0‚ğæ“¾j
+        // æœ€æ–°ã®ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ï¼ˆå…ƒã®ä»•æ§˜é€šã‚Šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹0ã‚’å–å¾—ï¼‰
         int firstIndex = 0;
         ReceiptData data = receiptQueue[firstIndex];
 
-        // PlayerStatus ‚É’l‚ğ‘‚«–ß‚·
+        // PlayerStatus ã«å€¤ã‚’æ›¸ãæˆ»ã™
         status.OverwriteHp(data.savedHp);
         status.OverWriteMoney(data.savedMoney);
         status.currentJumpCount = data.savedJumpCount;
 
         //
-        // •Û‘¶“à—e‚É condition ‚ğ’Ç‰Á‚µ‚½‚ªA‚±‚±‚Å‚Í‚Ü‚¾”½‰f‚µ‚Ä‚¢‚È‚¢
+        // ä¿å­˜å†…å®¹ã« condition ã‚’è¿½åŠ ã—ãŸãŒã€ã“ã“ã§ã¯ã¾ã åæ˜ ã—ã¦ã„ãªã„
         //
 
-        // g—pÏ‚İ‚Ì‚à‚Ì‚Í”jŠü
+        // ä½¿ç”¨æ¸ˆã¿ã®ã‚‚ã®ã¯ç ´æ£„
         receiptQueue.RemoveAt(firstIndex);
 
-        // ƒŒƒV[ƒgã‘‚«‚Å‚ÌƒCƒxƒ“ƒg”­‰Î
+        // ãƒ¬ã‚·ãƒ¼ãƒˆä¸Šæ›¸ãã§ã®ã‚¤ãƒ™ãƒ³ãƒˆç™ºç«
         OnReceiptUpdate?.Invoke(receiptQueue);
 
         UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptQueue.Count);

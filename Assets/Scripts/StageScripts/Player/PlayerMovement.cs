@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using UnityEngine;
 
 
 //
-// MVP ‚Ì "V" |  •¨—‰‰Z‚ÆˆÚ“®’S“–
+// MVP ã® "V" |  ç‰©ç†æ¼”ç®—ã¨ç§»å‹•æ‹…å½“
 //
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public event Action OnLanded;
 
     // ==========================================
-    // ƒCƒ“ƒXƒyƒNƒ^[İ’èiŠî–{’l‚Æ”{—¦j
+    // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¨­å®šï¼ˆåŸºæœ¬å€¤ã¨å€ç‡ï¼‰
     // ==========================================
     [Header("Speed Settings")]
     [SerializeField] private float defaultMoveSpeed = 5.0f;
@@ -25,19 +25,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float BurnJumpRate = 1.5f;
 
     // ==========================================
-    // “à•”(Private)QÆ‚Æó‘Ô
+    // å†…éƒ¨(Private)å‚ç…§ã¨çŠ¶æ…‹
     // ==========================================
     private Rigidbody rb;
     private EnvironmentSensor sensor;
 
-    // Presenter‚©‚ç–ˆƒtƒŒ[ƒ€“n‚³‚ê‚éw¦
+    // Presenterã‹ã‚‰æ¯ãƒ•ãƒ¬ãƒ¼ãƒ æ¸¡ã•ã‚Œã‚‹æŒ‡ç¤º
     private float currentHorizontalInput;
     private PlayerCondition currentCondition = PlayerCondition.Normal;
 
     private bool isKnockBacking = false;
 
     // ==========================================
-    // ŠO•”iPresenterj‚ÉŒöŠJ‚·‚éƒvƒƒpƒeƒB
+    // å¤–éƒ¨ï¼ˆPresenterï¼‰ã«å…¬é–‹ã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     // ==========================================
     public Vector3 LastSafePosition { get; private set; }
     public bool IsGrounded { get; private set; }
@@ -51,16 +51,16 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // ==========================================
-    // Presenter‚©‚çŒÄ‚Î‚ê‚é–½—ßŒQiƒRƒ}ƒ“ƒhj
+    // Presenterã‹ã‚‰å‘¼ã°ã‚Œã‚‹å‘½ä»¤ç¾¤ï¼ˆã‚³ãƒãƒ³ãƒ‰ï¼‰
     // ==========================================
 
-    // ˆÚ“®•ûŒü‚Æó‘Ô‚ÌXVi–ˆƒtƒŒ[ƒ€ Update ‚©‚çŒÄ‚Î‚ê‚é‘z’èj
+    // ç§»å‹•æ–¹å‘ã¨çŠ¶æ…‹ã®æ›´æ–°ï¼ˆæ¯ãƒ•ãƒ¬ãƒ¼ãƒ  Update ã‹ã‚‰å‘¼ã°ã‚Œã‚‹æƒ³å®šï¼‰
     public void SetMovementInput(float input, PlayerCondition condition)
     {
         currentHorizontalInput = input;
         currentCondition = condition;
 
-        // U‚èŒü‚«ˆ—
+        // æŒ¯ã‚Šå‘ãå‡¦ç†
         if (currentHorizontalInput > 0)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -71,21 +71,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // ƒWƒƒƒ“ƒv‚ÌÀs
+    // ã‚¸ãƒ£ãƒ³ãƒ—ã®å®Ÿè¡Œ
     public void ExecuteJump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0, 0);                     // —‰º’†‚ÌƒWƒƒƒ“ƒv“™‚ğl—¶‚µAY²‚Ì‘¬“x‚ğƒŠƒZƒbƒg
-        rb.AddForce(Vector3.up * GetCurrentJumpForce(), ForceMode.Impulse); // ƒWƒƒƒ“ƒv‚Æ‚È‚éã•ûŒü‚Ö‚Ì—Í‚Ì‰ÁZ
+        rb.velocity = new Vector3(rb.velocity.x, 0, 0);                     // è½ä¸‹ä¸­ã®ã‚¸ãƒ£ãƒ³ãƒ—ç­‰ã‚’è€ƒæ…®ã—ã€Yè»¸ã®é€Ÿåº¦ã‚’ãƒªã‚»ãƒƒãƒˆ
+        rb.AddForce(Vector3.up * GetCurrentJumpForce(), ForceMode.Impulse); // ã‚¸ãƒ£ãƒ³ãƒ—ã¨ãªã‚‹ä¸Šæ–¹å‘ã¸ã®åŠ›ã®åŠ ç®—
         IsGrounded = false;
     }
 
-    // ƒqƒbƒvƒhƒƒbƒv‚È‚Ç‚Ì‹}~‰º—p
+    // ãƒ’ãƒƒãƒ—ãƒ‰ãƒ­ãƒƒãƒ—ãªã©ã®æ€¥é™ä¸‹ç”¨
     public void ApplyDropForce(float force)
     {
         rb.velocity = new Vector3(0, -force, 0);
     }
 
-    // ƒmƒbƒNƒoƒbƒN‚ÌÀs
+    // ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã®å®Ÿè¡Œ
     public void ApplyKnockBack(Vector3 attackerPos)
     {
         Vector3 direction = transform.position - attackerPos;
@@ -93,20 +93,20 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(KnockBackSequence(direction));
     }
 
-    // ’â~
+    // åœæ­¢
     public void Stop()
     {
         rb.velocity = Vector3.zero;
     }
 
-    // ƒ[ƒvE•œŠˆ‚È‚Ç’n“_ˆÚ“®‚É
+    // ãƒ¯ãƒ¼ãƒ—ãƒ»å¾©æ´»æ™‚ãªã©åœ°ç‚¹ç§»å‹•ã«
     public void Warp(Vector3 position)
     {
         SetUp();
         rb.position = position;
     }
 
-    // ƒLƒlƒ}ƒeƒBƒbƒN‚ğƒIƒt(•¨—‰‰Z‚ğ’â~)
+    // ã‚­ãƒãƒãƒ†ã‚£ãƒƒã‚¯ã‚’ã‚ªãƒ•(ç‰©ç†æ¼”ç®—ã‚’åœæ­¢)
     public void SetKinematic(bool isKinematic)
     {
         rb.isKinematic = isKinematic;
@@ -119,21 +119,21 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // ==========================================
-    // •¨—‰‰Zi©ŒÈŠ®Œ‹‚·‚éˆ—j
+    // ç‰©ç†æ¼”ç®—ï¼ˆè‡ªå·±å®Œçµã™ã‚‹å‡¦ç†ï¼‰
     // ==========================================
 
-    // ˆÚ“®‚È‚Ç
+    // ç§»å‹•ãªã©
     void FixedUpdate()
     {
         if (rb.isKinematic || isKnockBacking) return;
 
         UpdateGroundStatus();
 
-        // •½–ÊˆÚ“®‚Ì“K—p
+        // å¹³é¢ç§»å‹•ã®é©ç”¨
         rb.velocity = new Vector3(currentHorizontalInput * GetCurrentMoveSpeed(), rb.velocity.y, 0);
     }
 
-    // Ú’n‚Ì”»’èE•œŠˆ‚Ì‚½‚ßÅŒã‚É‚¢‚½’n“_‚ğ‹L˜^
+    // æ¥åœ°ã®åˆ¤å®šãƒ»å¾©æ´»ã®ãŸã‚æœ€å¾Œã«ã„ãŸåœ°ç‚¹ã‚’è¨˜éŒ²
     private void UpdateGroundStatus()
     {
         bool isGroundedNow = sensor.IsGrounded();
@@ -143,24 +143,24 @@ public class PlayerMovement : MonoBehaviour
             IsGrounded = isGroundedNow;
             if (IsGrounded)
             {
-                OnLanded?.Invoke();     // Ú’nƒCƒxƒ“ƒg‚ğ”­‰Î
+                OnLanded?.Invoke();     // æ¥åœ°ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™ºç«
             }
         }
 
         if (isGroundedNow)
         {
-            SaveLastSafepoint(transform.position);  // ˆÀ‘S‚È’n“_‚ğ‹L˜^
+            SaveLastSafepoint(transform.position);  // å®‰å…¨ãªåœ°ç‚¹ã‚’è¨˜éŒ²
         }
     }
 
-    // •œŠˆ‚Ì‚½‚ßAÅŒã‚É‚¢‚½êŠ‚ğ‹L˜^
+    // å¾©æ´»ã®ãŸã‚ã€æœ€å¾Œã«ã„ãŸå ´æ‰€ã‚’è¨˜éŒ²
     private void SaveLastSafepoint(Vector3 position)
     {
         LastSafePosition = position;
     }
 
     // ==========================================
-    // “à•”ŒvZ—pƒƒ\ƒbƒh
+    // å†…éƒ¨è¨ˆç®—ç”¨ãƒ¡ã‚½ãƒƒãƒ‰
     // ==========================================
 
     private float GetCurrentMoveSpeed()
@@ -177,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
         return defaultJumpForce;
     }
 
-    // ƒmƒbƒNƒoƒbƒNˆ—
+    // ãƒãƒƒã‚¯ãƒãƒƒã‚¯å‡¦ç†
     private IEnumerator KnockBackSequence(Vector3 direction)
     {
         isKnockBacking = true;
@@ -187,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
         float hopY = 0.5f;
         Vector3 kbDir = new Vector3(kbX, hopY, 0f);
 
-        // ƒmƒbƒNƒoƒbƒN’¼‘O‚É‘¬“x‚ğƒŠƒZƒbƒg‚µ‚ÄˆÀ’è‚³‚¹‚é
+        // ãƒãƒƒã‚¯ãƒãƒƒã‚¯ç›´å‰ã«é€Ÿåº¦ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¦å®‰å®šã•ã›ã‚‹
         rb.velocity = Vector3.zero;
         rb.AddForce(kbDir * 5f, ForceMode.VelocityChange);
 
