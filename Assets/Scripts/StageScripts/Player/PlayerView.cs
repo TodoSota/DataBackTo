@@ -1,85 +1,91 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using UnityEngine;
 
 //
-// MVP ‚Ì "V" |  Œ©‚½–Ú‚Ì•ÏX‚ğs‚¤
+// MVP ã® "V" |  è¦‹ãŸç›®ã®å¤‰æ›´ã‚’è¡Œã†
 //
 public class PlayerView : MonoBehaviour
 {
     // ==========================================
-    // ƒCƒ“ƒXƒyƒNƒ^[İ’è
+    // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¨­å®š
     // ==========================================
     [Header("Animation")]
     [SerializeField] private Animator anim;
 
     [Header("Receipt Models")]
     public int scale = 2;
-    [SerializeField] private GameObject[] receiptModels;    // ƒŒƒV[ƒgƒ‚ƒfƒ‹B”ñ•\¦/•\¦‚ğ•ÏX‚·‚é
-    [SerializeField] private Transform targetBone;          // ƒŒƒV[ƒg‚ÌŠp“x‚ğŒˆ‚ß‚éª‚Á‚±‚Ìƒ{[ƒ“
+    [SerializeField] private GameObject[] receiptModels;    // ãƒ¬ã‚·ãƒ¼ãƒˆãƒ¢ãƒ‡ãƒ«ã€‚éè¡¨ç¤º/è¡¨ç¤ºã‚’å¤‰æ›´ã™ã‚‹
+    [SerializeField] private Transform targetBone;          // ãƒ¬ã‚·ãƒ¼ãƒˆã®è§’åº¦ã‚’æ±ºã‚ã‚‹æ ¹ã£ã“ã®ãƒœãƒ¼ãƒ³
     private Vector3 originEuler;
 
     [Header("Materials & Rendering")]
-    [SerializeField] private Renderer playerRenderer;      // –³“G“_–Å—p
-    [SerializeField] private MeshRenderer attackRenderer;  // UŒ‚”»’è‚ÌF•ÏX—p
+    [SerializeField] private Renderer playerRenderer;      // ç„¡æ•µç‚¹æ»…ç”¨
+    [SerializeField] private MeshRenderer attackRenderer;  // æ”»æ’ƒåˆ¤å®šã®è‰²å¤‰æ›´ç”¨
     [SerializeField] private Material faceMaterial;
     [SerializeField] private Material dispMaterial;
 
     [Header("Lights")]
     [SerializeField] private Light monitorSpotlight;
 
-    private Renderer[] targetRenderers;// ‘ÎÛ‚Æ‚È‚éƒ‚ƒfƒ‹‚ÌƒŒƒ“ƒ_ƒ‰[‘S‚Ä
-    public float scanDuration = 2.0f; // ƒXƒLƒƒƒ“‚É‚©‚©‚éŠÔ
-    private float scanStartY = -0.5f; // ƒ‚ƒfƒ‹‚Ì‰º’[‚ÌYÀ•Wiƒ[ƒJƒ‹j
-    private float scanEndY = 1.5f;   // ƒ‚ƒfƒ‹‚Ìã’[‚ÌYÀ•Wiƒ[ƒJƒ‹j
+    private Renderer[] targetRenderers;// å¯¾è±¡ã¨ãªã‚‹ãƒ¢ãƒ‡ãƒ«ã®ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼å…¨ã¦
+    public float scanDuration = 2.0f; // ã‚¹ã‚­ãƒ£ãƒ³ã«ã‹ã‹ã‚‹æ™‚é–“
+    private float scanStartY = -0.5f; // ãƒ¢ãƒ‡ãƒ«ã®ä¸‹ç«¯ã®Yåº§æ¨™ï¼ˆãƒ­ãƒ¼ã‚«ãƒ«ï¼‰
+    private float scanEndY = 1.5f;   // ãƒ¢ãƒ‡ãƒ«ã®ä¸Šç«¯ã®Yåº§æ¨™ï¼ˆãƒ­ãƒ¼ã‚«ãƒ«ï¼‰
 
     void Start()
     {
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î©“®æ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ãªã‘ã‚Œã°è‡ªå‹•å–å¾—
         if (anim == null) anim = GetComponentInChildren<Animator>();
         if (playerRenderer == null) playerRenderer = GetComponent<Renderer>();
 
         originEuler = targetBone.localEulerAngles;
 
-        // ƒŒƒV[ƒg‚Ì‰Šú‰»ˆ—
+        // ãƒ¬ã‚·ãƒ¼ãƒˆã®åˆæœŸåŒ–å‡¦ç†
         foreach (var model in receiptModels)
         {
             if (model != null) model.SetActive(false);
         }
 
-        // ƒŒƒV[ƒg”­s‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘ÎÛ‚É‚È‚éƒŒƒ“ƒ_ƒ‰[‚ğ‚·‚×‚ÄW‚ß‚é
+        // ãƒ¬ã‚·ãƒ¼ãƒˆç™ºè¡Œæ™‚ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å¯¾è±¡ã«ãªã‚‹ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚’ã™ã¹ã¦é›†ã‚ã‚‹
         targetRenderers = GetComponentsInChildren<Renderer>(true);
     }
 
     // ==========================================
-    // ƒAƒjƒ[ƒVƒ‡ƒ“ŠÖ˜A‚Ì–½—ßŒQ
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–¢é€£ã®å‘½ä»¤ç¾¤
     // ==========================================
-    // ƒAƒjƒ[ƒ^[‚É "WalkSpeed" ‚ğ“ü—ÍBƒ‚[ƒVƒ‡ƒ“‚É‰e‹¿
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã« "WalkSpeed" ã‚’å…¥åŠ›ã€‚ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«å½±éŸ¿
     public void UpdateMoveAnimation(float speed)
     {
         anim.SetFloat("WalkSpeed", speed);
     }
 
-    // ƒAƒjƒ[ƒ^[‚É "isGround" ‚ğ“ü—ÍBƒ‚[ƒVƒ‡ƒ“‚É‰e‹¿
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã« "isGround" ã‚’å…¥åŠ›ã€‚ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«å½±éŸ¿
     public void UpdateGroundAnimation(bool isGrounded)
     {
         anim.SetBool("isGround", isGrounded);
     }
 
-    // ƒAƒjƒ[ƒ^[‚É "isAttacking" ‚ğ“ü—ÍBƒ‚[ƒVƒ‡ƒ“‚É‰e‹¿
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã« "isAttacking" ã‚’å…¥åŠ›ã€‚ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«å½±éŸ¿
     public void SetAttackAnimation(bool isAttacking)
     {
         anim.SetBool("isAttacking", isAttacking);
     }
 
-    // ƒAƒjƒ[ƒ^[‚É "isHipdropping" ‚ğ“ü—ÍBƒ‚[ƒVƒ‡ƒ“‚É‰e‹¿
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã« "isHipdropping" ã‚’å…¥åŠ›ã€‚ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«å½±éŸ¿
     public void SetHipDropAnimation(bool isHipdropping)
     {
         anim.SetBool("isHipdropping", isHipdropping);
     }
 
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã« "isPressEnter" ã‚’å…¥åŠ›ã€‚ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«å½±éŸ¿
+    public void SetLoadAnimation(bool isPressEnter)
+    {
+        anim.SetBool("isPressEnter", isPressEnter);
+    }
+
     // ==========================================
-    // •`‰æEƒ}ƒeƒŠƒAƒ‹ŠÖ˜A‚Ì–½—ßŒQ
+    // æç”»ãƒ»ãƒãƒ†ãƒªã‚¢ãƒ«é–¢é€£ã®å‘½ä»¤ç¾¤
     // ==========================================
     public void SetAttackColor(Color color)
     {
@@ -104,7 +110,7 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    // ƒŒƒV[ƒg”­s‚ÉŒÄ‚Î‚ê‚éƒRƒ‹[ƒ`ƒ“
+    // ãƒ¬ã‚·ãƒ¼ãƒˆç™ºè¡Œæ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³
     public IEnumerator PlayScanEffect(Action onComplete = null)
     {
         float elapsedTime = 0f;
@@ -114,11 +120,11 @@ public class PlayerView : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float currentY = Mathf.Lerp(scanStartY, scanEndY, elapsedTime / scanDuration);
 
-            // æ“¾‚µ‚½‘S‚Ä‚Ìq—v‘fƒ‚ƒfƒ‹‚ÌRenderer‚É‘Î‚µ‚Äˆ—‚ğs‚¤
+            // å–å¾—ã—ãŸå…¨ã¦ã®å­è¦ç´ ãƒ¢ãƒ‡ãƒ«ã®Rendererã«å¯¾ã—ã¦å‡¦ç†ã‚’è¡Œã†
             foreach (var rend in targetRenderers)
             {
-                // ‘–¸ü‚ª‘–‚é‚Ì‚Í‘S‚ÄƒŒƒ“ƒ_ƒ‰[‚É‘Î‚µ‚Ä‚È‚Ì‚ÅAŒ™‚È‚ç‚±‚±‚Å–¼‘O‚È‚Ç‚Å’e‚­
-                // ‘ÎÛ‚ª MeshRenderer ‚© SkinnedMeshRenderer ‚Ì‚¾‚¯ˆ—‚·‚é
+                // èµ°æŸ»ç·šãŒèµ°ã‚‹ã®ã¯å…¨ã¦ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã«å¯¾ã—ã¦ãªã®ã§ã€å«Œãªã‚‰ã“ã“ã§åå‰ãªã©ã§å¼¾ã
+                // å¯¾è±¡ãŒ MeshRenderer ã‹ SkinnedMeshRenderer ã®æ™‚ã ã‘å‡¦ç†ã™ã‚‹
                 if (rend is MeshRenderer || rend is SkinnedMeshRenderer)
                 {
                     if (rend.material.HasProperty("_ScanlineY"))
@@ -145,10 +151,10 @@ public class PlayerView : MonoBehaviour
     }
 
     // ==========================================
-    // ƒŒƒWƒLƒƒƒ‰“Á—L‚ÌƒMƒ~ƒbƒNiƒŒƒV[ƒgEƒfƒBƒXƒvƒŒƒCj
+    // ãƒ¬ã‚¸ã‚­ãƒ£ãƒ©ç‰¹æœ‰ã®ã‚®ãƒŸãƒƒã‚¯ï¼ˆãƒ¬ã‚·ãƒ¼ãƒˆãƒ»ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ï¼‰
     // ==========================================
 
-    // uƒ[ƒJƒ‹Y²‘¬“xv‚É‰‚¶‚Ä—h‚ç‚·
+    // ã€Œãƒ­ãƒ¼ã‚«ãƒ«Yè»¸é€Ÿåº¦ã€ã«å¿œã˜ã¦æºã‚‰ã™
     public void FlapReceipt(float localVelocityY)
     {
         float afterRotX = originEuler.x + localVelocityY * scale;
@@ -157,16 +163,16 @@ public class PlayerView : MonoBehaviour
         targetBone.localEulerAngles = new Vector3(afterRotX, originEuler.y, originEuler.z);
     }
 
-    // ƒZ[ƒu‚È‚Ç‚É Presenter ‚©‚çŒÄ‚Î‚ê‚é
+    // ã‚»ãƒ¼ãƒ–æ™‚ãªã©ã« Presenter ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
     public void UpdateReceiptDisplay(int viewnum)
     {
         for (int i = 0; i < receiptModels.Length; i++)
         {
-            receiptModels[i].SetActive(i < viewnum); // viewnum–¢–‚ÌƒCƒ“ƒfƒbƒNƒX‚¾‚¯true‚É‚·‚é
+            receiptModels[i].SetActive(i < viewnum); // viewnumæœªæº€ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã ã‘trueã«ã™ã‚‹
         }
     }
 
-    // ƒ‚ƒjƒ^[‚Ìƒ‰ƒCƒg‚Ì on/off 
+    // ãƒ¢ãƒ‹ã‚¿ãƒ¼ã®ãƒ©ã‚¤ãƒˆã® on/off 
     public void SetMonitorLight(bool isPowered)
     {
         if (isPowered)
@@ -181,7 +187,7 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    // Šç‚Ì•\î‚ÌØ‚è‘Ö‚¦(UVƒXƒNƒ[ƒ‹)
+    // é¡”ã®è¡¨æƒ…ã®åˆ‡ã‚Šæ›¿ãˆ(UVã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«)
     public void SetFaceExpression(bool isAlternative)
     {
         if (isAlternative)

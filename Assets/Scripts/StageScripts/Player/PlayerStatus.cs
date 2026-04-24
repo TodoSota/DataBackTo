@@ -1,38 +1,38 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 //
-// MVP ‚Ì "M" | ƒvƒŒƒCƒ„[‚ÌŠî–{ƒXƒe[ƒ^ƒX‚Æó‘Ô•Ï‰»‚Ìƒ‹[ƒ‹’S“–
+// MVP ã® "M" | ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åŸºæœ¬ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨çŠ¶æ…‹å¤‰åŒ–ã®ãƒ«ãƒ¼ãƒ«æ‹…å½“
 //
 public class PlayerStatus : MonoBehaviour, IKillable
 {
-    // Šî–{ƒXƒe[ƒ^ƒX
+    // åŸºæœ¬ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
     public float hp = 100f;
     private float MAX_HP = 100f;
     public int money = 0;
     public const int MaxMoney = 50;
     public bool isDead = false;
 
-    // ó‘ÔˆÙí
+    // çŠ¶æ…‹ç•°å¸¸
     public PlayerCondition CurrentCondition = PlayerCondition.Normal;
 
-    // ó‘ÔˆÙí‚Ìƒ_ƒ[ƒW‘‰Á”{—¦
+    // çŠ¶æ…‹ç•°å¸¸æ™‚ã®ãƒ€ãƒ¡ãƒ¼ã‚¸å¢—åŠ å€ç‡
     public float shortDamageMult = 1.5f;
     public float burnDecayMult = 1.5f;
 
-    // ©“®Œ¸­’l
+    // è‡ªå‹•æ¸›å°‘å€¤
     public float hpLossPerSecond = 0.5f;
     private float hpLossMult => (CurrentCondition == PlayerCondition.Burn) ? burnDecayMult :
                        (CurrentCondition == PlayerCondition.Short) ? 0f :
                         1f;
 
-    // ƒAƒNƒVƒ‡ƒ“ŠÇ—
+    // ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ç®¡ç†
     public int currentJumpCount = 0;
     public int maxJumpLimit = 1;
     public bool isGrounded = true;
 
-    // ƒAƒNƒVƒ‡ƒ“ƒCƒxƒ“ƒg
+    // ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚¤ãƒ™ãƒ³ãƒˆ
     public event Action dieAction;
     public UnityEvent<float> OnHPChanged;
     public UnityEvent<int> OnMoneyChanged;
@@ -45,7 +45,7 @@ public class PlayerStatus : MonoBehaviour, IKillable
         UnityEngine.Debug.Log("Money : " + money);
     }
 
-    // ƒ_ƒ[ƒWŒvZ‚Æ“K—p
+    // ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ã¨é©ç”¨
     public void TakeDamage(float damage, PlayerCondition condition = PlayerCondition.Normal)
     {
         float shortMult = (CurrentCondition == PlayerCondition.Short) ? shortDamageMult : 1f;
@@ -62,14 +62,14 @@ public class PlayerStatus : MonoBehaviour, IKillable
 
         OnHPChanged?.Invoke(hp / MAX_HP);
 
-        // HP‚ªŒ¸‚Á‚½uŠÔ‚É€–S”»’è
+        // HPãŒæ¸›ã£ãŸç¬é–“ã«æ­»äº¡åˆ¤å®š
         if (hp <= 0 && !isDead)
         {
             Die();
         }
     }
 
-    // ˆÚ“®‚É‚æ‚éHPŒ¸­
+    // ç§»å‹•ã«ã‚ˆã‚‹HPæ¸›å°‘
     public void ApplyMovementPenalty(float deltaTime)
     {
         ConsumeHp(hpLossPerSecond * hpLossMult * deltaTime);
@@ -87,35 +87,35 @@ public class PlayerStatus : MonoBehaviour, IKillable
 
         CurrentCondition = condition;
         OnConditionChanged?.Invoke(CurrentCondition);
-        Debug.Log("ó‘ÔˆÙí‚ğó‚¯‚½");
+        Debug.Log("çŠ¶æ…‹ç•°å¸¸ã‚’å—ã‘ãŸ");
     }
 
-    // êŠO—‰º‚È‚Ç‚Ì‘¦€
+    // å ´å¤–è½ä¸‹ãªã©ã®å³æ­»
     public void InstantKill()
     {
         if (hp <= 0) return;
         hp = 0;
-        ConsumeHp(0); // €–S”»’è‚Ì‚½‚ß‹­§ƒ[ƒ‚É
+        ConsumeHp(0); // æ­»äº¡åˆ¤å®šã®ãŸã‚å¼·åˆ¶ã‚¼ãƒ­ã«
     }
 
-    // Š‹à‚Ì’Ç‰Á
+    // æ‰€æŒé‡‘ã®è¿½åŠ 
     public void AddMoney(int amount)
     {
         money += amount;
         UnityEngine.Debug.Log("Change Money" + amount);
         money = Mathf.Min(money, MaxMoney);
 
-        OnMoneyChanged?.Invoke(money);  // •Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m
+        OnMoneyChanged?.Invoke(money);  // å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥
     }
 
-    // Š‹à‚Ì•ÏX
+    // æ‰€æŒé‡‘ã®å¤‰æ›´
     public void OverWriteMoney(int amount)
     {
         money = amount;
-        OnMoneyChanged?.Invoke(money);  // •Ï‰»ƒCƒxƒ“ƒg‚ğ’Ê’m
+        OnMoneyChanged?.Invoke(money);  // å¤‰åŒ–ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥
     }
 
-    // €–S
+    // æ­»äº¡
     void Die()
     {
         UnityEngine.Debug.Log("Died!!");
@@ -123,13 +123,13 @@ public class PlayerStatus : MonoBehaviour, IKillable
         dieAction?.Invoke();
     }
 
-    // •œŠˆ“à•”“I‚Èˆ—‚ğ–ß‚·‚¾‚¯AƒXƒe[ƒ^ƒX‚ÉŠÖ‚µ‚Ä‚ÍƒŒƒV[ƒg‚Ö
+    // å¾©æ´»å†…éƒ¨çš„ãªå‡¦ç†ã‚’æˆ»ã™ã ã‘ã€ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã«é–¢ã—ã¦ã¯ãƒ¬ã‚·ãƒ¼ãƒˆã¸
     public void Revive()
     {
         isDead = false;
     }
 
-    // ƒWƒƒƒ“ƒv‰ñ”‚ÌƒŠƒZƒbƒg
+    // ã‚¸ãƒ£ãƒ³ãƒ—å›æ•°ã®ãƒªã‚»ãƒƒãƒˆ
     public void ResetJumpConut()
     {
         currentJumpCount = 0;

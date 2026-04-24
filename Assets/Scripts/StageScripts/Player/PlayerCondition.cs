@@ -1,7 +1,7 @@
+﻿//
+// MVP の "M" (データ定義) 厳密には言い切りにくいけど | 状態異常の定義
 //
-// MVP �� "M" (�f�[�^��`) �����ɂ͌����؂�ɂ������� | ��Ԉُ�̒�`
-//
-public enum PlayerCondition 
+public enum PlayerCondition
 {
     Normal,
     Short,

@@ -12,6 +12,7 @@ public class PlayerInput : MonoBehaviour
     public float HorizontalInput { get; private set; }
     public bool IsShiftPressed { get; private set; }
     public bool IsDownArrowPressed { get; private set; }
+    public bool IsEnterPressed { get; private set; }
 
     // ==================================================
     // ベントとして通知する入力（単発の操作）
@@ -32,7 +33,7 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        
+
         HorizontalInput = Input.GetAxisRaw("Horizontal");                                       // 左右移動 入力の取得
         IsShiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);   // Shift    入力の取得
         IsDownArrowPressed = Input.GetKey(KeyCode.DownArrow);                                   // 下矢印   入力の取得
@@ -59,11 +60,12 @@ public class PlayerInput : MonoBehaviour
     }
 
     // レシートの長押し・短押し判定ロジック
-    private void ProcessReceiptInput()
+    public void ProcessReceiptInput()
     {
         // 押している間
         if (Input.GetKey(KeyCode.Return) && !isSaveProcessed)
         {
+            IsEnterPressed = true;
             holdTimer += Time.deltaTime;
             if (holdTimer >= receiptHoldRequiredTime)
             {
@@ -76,6 +78,7 @@ public class PlayerInput : MonoBehaviour
         // 離した瞬間
         if (Input.GetKeyUp(KeyCode.Return))
         {
+            IsEnterPressed = false;
             // セーブが処理されておらず、かつ一定時間以上〜規定時間未満なら短押し（ロード）と判定
             if (!isSaveProcessed && holdTimer > 0.1f && holdTimer < receiptHoldRequiredTime)
             {

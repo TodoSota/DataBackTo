@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +9,11 @@ public class CoinBullet : MonoBehaviour
 
     void Start()
     {
-        // ‘O•û•ûŒü‚É‘¬“x‚ğ—^‚¦‚é
+        // å‰æ–¹æ–¹å‘ã«é€Ÿåº¦ã‚’ä¸ãˆã‚‹
         GetComponent<Rigidbody>().velocity = transform.right * speed;
 
-        // lifetime Œã‚É©•ª‚ğÁ‹
-        Destroy(gameObject,  lifetime);
+        // lifetime å¾Œã«è‡ªåˆ†ã‚’æ¶ˆå»
+        Destroy(gameObject, lifetime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,7 +21,7 @@ public class CoinBullet : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             other.GetComponent<EnemyController>()?.TakeDamage(1, transform.position);
-            Destroy(gameObject); // “–‚½‚ê‚ÎÁ–Å
+            Destroy(gameObject); // å½“ãŸã‚Œã°æ¶ˆæ»…
         }
     }
 

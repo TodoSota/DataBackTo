@@ -1,14 +1,14 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System;
 using UnityEngine;
 
 //
-// MVP ‚Ì "V" |  UŒ‚ŠÖŒW‚Å‚ÌŒŸ’mE”»’è‚ğs‚¤
+// MVP ã® "V" |  æ”»æ’ƒé–¢ä¿‚ã§ã®æ¤œçŸ¥ãƒ»åˆ¤å®šã‚’è¡Œã†
 //
 public class PlayerCombat : MonoBehaviour
 {
     // ==========================================
-    // ƒCƒ“ƒXƒyƒNƒ^[İ’è
+    // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¨­å®š
     // ==========================================
     [Header("Hitbox Settings")]
     [SerializeField] private GameObject attackHitbox;
@@ -28,7 +28,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float hitDuration = 0.1f;
 
     // ==========================================
-    // ó‘Ô‚ÆQÆ
+    // çŠ¶æ…‹ã¨å‚ç…§
     // ==========================================
     public enum AttackType { Normal, HipDrop, SuperHipDrop }
     public AttackType CurrentAttackType { get; private set; }
@@ -37,7 +37,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerStatus status;
     private PlayerMovement movement;
 
-    // ó‘Ô•Ï‰»‚ğ’m‚ç‚¹‚é‚½‚ß‚ÌƒCƒxƒ“ƒg
+    // çŠ¶æ…‹å¤‰åŒ–ã‚’çŸ¥ã‚‰ã›ã‚‹ãŸã‚ã®ã‚¤ãƒ™ãƒ³ãƒˆ
     public event Action<Color> OnAttackColorChanged;
     public event Action<bool> OnAttackStateChanged;
     public event Action<bool> OnHipdropStateChanged;
@@ -51,29 +51,29 @@ public class PlayerCombat : MonoBehaviour
     }
 
     // ==========================================
-    // Presenter‚©‚çŒÄ‚Î‚ê‚éÀsƒƒ\ƒbƒh
+    // Presenterã‹ã‚‰å‘¼ã°ã‚Œã‚‹å®Ÿè¡Œãƒ¡ã‚½ãƒƒãƒ‰
     // ==========================================
 
-    // ’ÊíUŒ‚
+    // é€šå¸¸æ”»æ’ƒ
     public void ExecuteNormalAttack()
     {
         StartCoroutine(NormalAttackRoutine());
     }
 
-    // ËŒ‚
+    // å°„æ’ƒ
     public void ExecuteShoot()
     {
         Instantiate(coinPrefab, firePoint.position, transform.rotation);
         UnityEngine.Debug.Log("Shoooooot!!!");
     }
 
-    // ƒqƒbƒvƒhƒƒbƒv
+    // ãƒ’ãƒƒãƒ—ãƒ‰ãƒ­ãƒƒãƒ—
     public void ExecuteHipDrop(bool isSuper)
     {
         StartCoroutine(HipDropRoutine(isSuper));
     }
 
-    // €–S‚È‚Ç‚Ì‹­§ƒLƒƒƒ“ƒZƒ‹—p
+    // æ­»äº¡æ™‚ãªã©ã®å¼·åˆ¶ã‚­ãƒ£ãƒ³ã‚»ãƒ«ç”¨
     public void CancelAttacks()
     {
         StopAllCoroutines();
@@ -86,7 +86,7 @@ public class PlayerCombat : MonoBehaviour
     }
 
     // ==========================================
-    // UŒ‚‚ÌƒRƒ‹[ƒ`ƒ“iŠÔ‚ÌŠÇ—‚Æ“–‚½‚è”»’è‚Ì‘€ìj
+    // æ”»æ’ƒã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼ˆæ™‚é–“ã®ç®¡ç†ã¨å½“ãŸã‚Šåˆ¤å®šã®æ“ä½œï¼‰
     // ==========================================
 
     private IEnumerator NormalAttackRoutine()
@@ -94,8 +94,8 @@ public class PlayerCombat : MonoBehaviour
         CurrentAttackType = AttackType.Normal;
 
         attackHitbox.SetActive(true);
-        OnAttackStateChanged?.Invoke(true);           // ƒAƒjƒ[ƒVƒ‡ƒ“—pƒCƒxƒ“ƒg
-        OnAttackColorChanged?.Invoke(Color.yellow);   // F•ÏX—pƒCƒxƒ“ƒg
+        OnAttackStateChanged?.Invoke(true);           // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ã‚¤ãƒ™ãƒ³ãƒˆ
+        OnAttackColorChanged?.Invoke(Color.yellow);   // è‰²å¤‰æ›´ç”¨ã‚¤ãƒ™ãƒ³ãƒˆ
 
         yield return new WaitForSeconds(attackDuration);
 
@@ -110,11 +110,11 @@ public class PlayerCombat : MonoBehaviour
 
         OnHipdropStateChanged?.Invoke(true);
 
-        // UŒ‚”»’è‚ğ’¼‰º‚ÉˆÚ“®
+        // æ”»æ’ƒåˆ¤å®šã‚’ç›´ä¸‹ã«ç§»å‹•
         attackHitbox.transform.localPosition = new Vector3(0, -1.2f, 0);
         attackHitbox.SetActive(true);
 
-        // Short(‘Ñ“d)ó‘Ô‚È‚çƒXƒP[ƒ‹•ÏX
+        // Short(å¸¯é›»)çŠ¶æ…‹ãªã‚‰ã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
         Vector3 defaultScale = attackHitbox.transform.localScale;
         if (status.CurrentCondition == PlayerCondition.Short)
         {
@@ -123,23 +123,23 @@ public class PlayerCombat : MonoBehaviour
 
         OnAttackColorChanged?.Invoke(isSuper ? Color.magenta : Color.yellow);
 
-        // UŒ‚‘O‚É‹ó’†‚Å‚¿‚å‚Á‚Æ‘Ò‹@
+        // æ”»æ’ƒå‰ã«ç©ºä¸­ã§ã¡ã‚‡ã£ã¨å¾…æ©Ÿ
         movement.Stop();
         yield return new WaitForSeconds(attackDuration);
 
-        // —‰ºˆ—
+        // è½ä¸‹å‡¦ç†
         movement.ApplyDropForce(isSuper ? hipdropForce * 2 : hipdropForce);
 
-        // ’…’n‚Ü‚Å‘Ò‹@
+        // ç€åœ°ã¾ã§å¾…æ©Ÿ
         yield return new WaitUntil(() => movement.IsGrounded);
 
-        // ’Êíƒqƒbƒvƒhƒƒbƒv‚È‚ç©ƒ_ƒ[ƒW
+        // é€šå¸¸ãƒ’ãƒƒãƒ—ãƒ‰ãƒ­ãƒƒãƒ—ãªã‚‰è‡ªå‚·ãƒ€ãƒ¡ãƒ¼ã‚¸
         if (!isSuper)
         {
             status.ConsumeHp(hipdropDamage);
         }
 
-        // ”»’è‚ğŒ³‚É–ß‚·
+        // åˆ¤å®šã‚’å…ƒã«æˆ»ã™
         IsHipdropping = false;
         OnHipdropStateChanged?.Invoke(false);
         attackHitbox.SetActive(false);
@@ -148,10 +148,10 @@ public class PlayerCombat : MonoBehaviour
     }
 
     // ==========================================
-    // ƒ_ƒ[ƒWŒvZ‚ÆÕ“Ë”»’è
+    // ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ã¨è¡çªåˆ¤å®š
     // ==========================================
 
-    // ƒ_ƒ[ƒWŒvZ‚ÌŒW”‚É‚È‚é‚à‚Ì‚ğŒvã
+    // ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ã®ä¿‚æ•°ã«ãªã‚‹ã‚‚ã®ã‚’è¨ˆä¸Š
     private float GetAttackTypeMultiplier(AttackType type) => type switch
     {
         AttackType.Normal => 1.0f,
@@ -160,17 +160,17 @@ public class PlayerCombat : MonoBehaviour
         _ => 1.0f
     };
 
-    // ó‘ÔˆÙí‚É‰‚¶‚Ä ƒ_ƒ[ƒW”{—¦ ‚ğ•ÏX
+    // çŠ¶æ…‹ç•°å¸¸ã«å¿œã˜ã¦ ãƒ€ãƒ¡ãƒ¼ã‚¸å€ç‡ ã‚’å¤‰æ›´
     private float ConditionMultiplier => (status.CurrentCondition == PlayerCondition.Burn) ? 2.0f : 1.0f;
     private int TouchDamage => (status.CurrentCondition == PlayerCondition.Burn) ? 1 : 5;
 
-    // ŒW”‚È‚Ç‚à‚ë‚à‚ë‚ğ‚Ü‚Æ‚ß‚ÄÅI”’lŒvZ
+    // ä¿‚æ•°ãªã©ã‚‚ã‚ã‚‚ã‚ã‚’ã¾ã¨ã‚ã¦æœ€çµ‚æ•°å€¤è¨ˆç®—
     private int GetFinalDamage(AttackType type)
     {
         return Mathf.RoundToInt(basePower * GetAttackTypeMultiplier(type) * ConditionMultiplier);
     }
 
-    // ƒqƒbƒgƒ{ƒbƒNƒX‚É“G‚ª“ü‚é
+    // ãƒ’ãƒƒãƒˆãƒœãƒƒã‚¯ã‚¹ã«æ•µãŒå…¥ã‚‹
     private void OnTriggerEnter(Collider other)
     {
         if (attackHitbox.activeSelf && other.CompareTag("Enemy"))
@@ -181,7 +181,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    // “G‚ÆÚG
+    // æ•µã¨æ¥è§¦
     private void OnCollisionEnter(Collision collision)
     {
         GameObject target = collision.gameObject;
