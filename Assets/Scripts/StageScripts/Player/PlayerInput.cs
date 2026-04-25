@@ -60,7 +60,7 @@ public class PlayerInput : MonoBehaviour
     }
 
     // レシートの長押し・短押し判定ロジック
-    public void ProcessReceiptInput()
+    private void ProcessReceiptInput()
     {
         // 押している間
         if (Input.GetKey(KeyCode.Return) && !isSaveProcessed)
