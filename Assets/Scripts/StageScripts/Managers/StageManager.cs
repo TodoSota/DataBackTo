@@ -31,8 +31,10 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
+        
         var PlayerStatus = _player.GetComponent<PlayerStatus>();
         PlayerStatus.dieAction+=OnPlayerDeath;
+         
     }
 
     public void ClearStage()
@@ -77,11 +79,12 @@ public class StageManager : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
     }
-
+    
     public void OnPlayerDeath()
     {
         StartCoroutine(DeathSequence());
     }
+
 
     private IEnumerator DeathSequence()
     {
@@ -89,9 +92,9 @@ public class StageManager : MonoBehaviour
         
         var status = _player.GetComponent<PlayerStatus>();
         
-        bool respawned = status.Respawn();
+        bool canRespawn = !status.isDead;
 
-        if(respawned)
+        if(canRespawn)
         {
             RespawnManager.Instance.Respawn();
         }
@@ -101,6 +104,7 @@ public class StageManager : MonoBehaviour
         }
         yield return null;
     }
+    
 
     public void PlayHitstop(float duration)
     {

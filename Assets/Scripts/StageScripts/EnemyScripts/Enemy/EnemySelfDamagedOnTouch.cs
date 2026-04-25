@@ -21,9 +21,9 @@ public class EnemySelfDamagedOnTouch : MonoBehaviour
         int otherLayer = 1 << collision.gameObject.layer;
         if ((targetMask & (1 << other.gameObject.layer)) > 0)
         {
-            if (other.TryGetComponent<PlayerController>(out var player))
+            if (other.TryGetComponent<PlayerStatus>(out var player))
             {
-                player.TakeDamage(status.TouchDamage, transform.position);
+                player.TakeDamage(status.TouchDamage);
             }
         }
     }

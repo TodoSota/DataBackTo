@@ -1,9 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+//
+// MVP ã® "M" | ãƒ¬ã‚·ãƒ¼ãƒˆï¼ˆã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ï¼‰ã®ä¿æŒã¨å¾©å…ƒãƒ­ã‚¸ãƒƒã‚¯æ‹…å½“
+//
 public struct ReceiptData
 {
     public float savedHp;
@@ -22,94 +23,60 @@ public struct ReceiptData
 
 public class ReceiptSystem : MonoBehaviour
 {
-    // İ’è
-    public float requireHoldTime = 0.5f;// ƒZ[ƒu”­‰Î‚É•K—v‚ÈŠÔ
-    public int maxReceiptLimit = 3;     // Å‘å•Û”
+    [Header("Settings")]
+    public int maxReceiptLimit = 3;     // æœ€å¤§ä¿æŒæ•°
 
-    // ƒŒƒV[ƒg•Û‘¶‚ÌŠi”[êŠ
-    public List<ReceiptData> receiptStack = new List<ReceiptData>();
+    // ãƒ¬ã‚·ãƒ¼ãƒˆä¿å­˜ã®æ ¼ç´å ´æ‰€
+    public List<ReceiptData> receiptQueue = new List<ReceiptData>();
 
     private PlayerStatus status;
-    private PlayerLookController lookController;
-    private float holdTimer = 0f;
-    private bool isSaveProcessed = false;
 
-    // ƒŒƒV[ƒg‚ÌƒCƒxƒ“ƒg
-    public  UnityEvent<List<ReceiptData>> OnReceiptUpdate;
+    // ãƒ¬ã‚·ãƒ¼ãƒˆã®ã‚¤ãƒ™ãƒ³ãƒˆUIã®æ›´æ–°ãªã©ã«ä½¿ç”¨
+    public UnityEvent<List<ReceiptData>> OnReceiptUpdate;
 
     void Start()
     {
         status = GetComponent<PlayerStatus>();
-        lookController = GetComponent<PlayerLookController>();
     }
 
-    void Update()
+    public void SaveState()
     {
-        // Enter ƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚éŠÔ
-        if (Input.GetKey(KeyCode.Return) && !(isSaveProcessed))
-        {
-            // ’·‰Ÿ‚µƒ^ƒCƒ}[‰ÁZ
-            holdTimer += Time.deltaTime;
+        if (receiptQueue.Count >= maxReceiptLimit) return;  // ä¸Šé™ãªã‚‰çµ‚äº†
 
-            if (holdTimer >= requireHoldTime)
-            {
-                SaveState();
-                isSaveProcessed = true;
-                holdTimer = 0f; // d•¡ƒZ[ƒu–h~‚Ì‚½‚ßƒŠƒZƒbƒg
-            }
-        }
-
-        // ƒL[‚ğ—£‚µ‚½uŠÔ
-        if (Input.GetKeyUp(KeyCode.Return))
-        {
-            if (!isSaveProcessed && holdTimer < requireHoldTime && holdTimer > 0.1f)
-            {
-                LoadState();
-            }
-            holdTimer = 0f;
-            isSaveProcessed = false;
-        }
-    }
-
-    void SaveState()
-    {
-        if (receiptStack.Count >= maxReceiptLimit) return;  // ãŒÀ‚È‚çI—¹
-
-        // ‹L˜^‚µ‚½ƒf[ƒ^‚ğŠi”[
+        // è¨˜éŒ²ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´
         ReceiptData newData = new ReceiptData(status.hp, status.money, status.currentJumpCount, status.CurrentCondition);
-        receiptStack.Add(newData);
+        receiptQueue.Add(newData);
 
-        // ƒ‚ƒfƒ‹‚ÌŒ©‚½–Ú‚ğ•ÏX
-        lookController.ReceiptReload(receiptStack.Count);
+        // ãƒ¬ã‚·ãƒ¼ãƒˆä¸Šæ›¸ãã§ã®ã‚¤ãƒ™ãƒ³ãƒˆç™ºç«
+        OnReceiptUpdate?.Invoke(receiptQueue);
 
-        // ƒŒƒV[ƒgã‘‚«‚Å‚ÌƒCƒxƒ“ƒg”­‰ÎiƒŒƒV[ƒgUI‚Ì“®‹@‚È‚Çj
-        OnReceiptUpdate?.Invoke(receiptStack);
-
-        UnityEngine.Debug.Log("Receipt Done!! : " + receiptStack.Count);
+        UnityEngine.Debug.Log("Receipt Done!! : " + receiptQueue.Count);
     }
 
     public bool LoadState()
     {
-        if (receiptStack.Count <= 0) return false;    // Š‚ª‚È‚¯‚ê‚ÎÀs•s‰Â
+        if (receiptQueue.Count <= 0) return false;    // æ‰€æŒãŒãªã‘ã‚Œã°å®Ÿè¡Œä¸å¯
 
-        // ÅV‚Ìƒf[ƒ^‚ğæ‚èo‚·
+        // æœ€æ–°ã®ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ï¼ˆå…ƒã®ä»•æ§˜é€šã‚Šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹0ã‚’å–å¾—ï¼‰
         int firstIndex = 0;
-        ReceiptData data = receiptStack[firstIndex];
+        ReceiptData data = receiptQueue[firstIndex];
 
-        // PlayerStatus ‚É’l‚ğ‘‚«–ß‚·
+        // PlayerStatus ã«å€¤ã‚’æ›¸ãæˆ»ã™
         status.OverwriteHp(data.savedHp);
         status.OverWriteMoney(data.savedMoney);
         status.currentJumpCount = data.savedJumpCount;
 
-        // g—pÏ‚İ‚Ì‚à‚Ì‚Í”jŠü
-        receiptStack.RemoveAt(firstIndex);
-        // ƒ‚ƒfƒ‹‚ÌŒ©‚½–Ú‚ğ•ÏX
-        lookController.ReceiptReload(receiptStack.Count);
+        //
+        // ä¿å­˜å†…å®¹ã« condition ã‚’è¿½åŠ ã—ãŸãŒã€ã“ã“ã§ã¯ã¾ã åæ˜ ã—ã¦ã„ãªã„
+        //
 
-        // ƒŒƒV[ƒgã‘‚«‚Å‚ÌƒCƒxƒ“ƒg”­‰ÎiƒŒƒV[ƒgUI‚Ì“®‹@‚È‚Çj
-        OnReceiptUpdate?.Invoke(receiptStack);   
+        // ä½¿ç”¨æ¸ˆã¿ã®ã‚‚ã®ã¯ç ´æ£„
+        receiptQueue.RemoveAt(firstIndex);
 
-        UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptStack.Count);
+        // ãƒ¬ã‚·ãƒ¼ãƒˆä¸Šæ›¸ãã§ã®ã‚¤ãƒ™ãƒ³ãƒˆç™ºç«
+        OnReceiptUpdate?.Invoke(receiptQueue);
+
+        UnityEngine.Debug.Log("Receipt is Used!! Current Num of : " + receiptQueue.Count);
         status.DisplayState();
         return true;
     }
